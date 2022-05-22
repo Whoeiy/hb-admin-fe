@@ -1,3 +1,11 @@
+# hb-admin-fe
+**运行本项目：**
+```
+yarn install // 安装依赖
+yarn run dev // 运行项目
+```
+---
+# 原文
 # vue3-admin
 
 - [知乎：如何看待慕课网涉嫌抄袭开源项目作为《Java工程师》的终极项目并上线销售？](https://www.zhihu.com/question/464292538)
