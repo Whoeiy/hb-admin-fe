@@ -2,7 +2,7 @@
   <el-card class="good-container">
     <template #header>
       <div class="header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd">新增商品</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd">新增礼物</el-button>
       </div>
     </template>
     <el-table
@@ -18,21 +18,21 @@
       </el-table-column>
       <el-table-column
         prop="goodsId"
-        label="商品编号"
+        label="礼物编号"
       >
       </el-table-column>
       <el-table-column
         prop="goodsName"
-        label="商品名"
+        label="礼物名"
       >
       </el-table-column>
       <el-table-column
         prop="goodsIntro"
-        label="商品简介"
+        label="礼物简介"
       >
       </el-table-column>
       <el-table-column
-        label="商品图片"
+        label="礼物图片"
         width="150px"
       >
         <template #default="scope">
@@ -41,12 +41,12 @@
       </el-table-column>
       <el-table-column
         prop="stockNum"
-        label="商品库存"
+        label="礼物库存"
       >
       </el-table-column>
       <el-table-column
         prop="sellingPrice"
-        label="商品售价"
+        label="礼物售价"
       >
       </el-table-column>
       <el-table-column
