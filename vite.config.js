@@ -34,6 +34,7 @@ export default ({ mode }) =>  defineConfig({
     proxy: {
       '/api': {
         target: 'http://backend-api-02.newbee.ltd/manage-api/v1',
+        // target: 'http://localhost:8080/',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')
       }

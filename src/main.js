@@ -84,7 +84,7 @@ app.use(ElButton)
     .use(ElInputNumber)
 
     Sentry.init({
-      dsn: "https://f866b695d21d467ba523f1adf14e0a24@o584908.ingest.sentry.io/5737358",
+      dsn: "https://0d9ad9a4f4ef4da69866d510241f17b8@o1261393.ingest.sentry.io/6439069",
       integrations: [new Integrations.BrowserTracing()],
     
       // Set tracesSampleRate to 1.0 to capture 100%

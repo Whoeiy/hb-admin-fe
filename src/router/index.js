@@ -65,6 +65,12 @@ const router = createRouter({
       ]
     },
     {
+      path: '/LabelManagement',
+      name: 'LabelManagement',
+      component: () => import(/* webpackChunkName: "swiper" */ '../views/LabelManagement.vue')
+    },
+
+    {
       path: '/good',
       name: 'good',
       component: () => import(/* webpackChunkName: "new" */ '../views/Good.vue')
