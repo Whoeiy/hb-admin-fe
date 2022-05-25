@@ -93,17 +93,4 @@ app.use(ElButton)
       tracesSampleRate: 1.0,
     });
 
-    // Sentry.init({
-    //   Vue,
-    //   dsn: 'https://0d9ad9a4f4ef4da69866d510241f17b8@o1261393.ingest.sentry.io/6439069',
-    //   integrations: [
-    //     new BrowserTracing({
-    //       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-    //       tracingOrigins: ['localhost', 'my-site-url.com', /^\//],
-    //     }),
-    //   ],
-    //   tracesSampleRate: 1.0,
-    //   release: process.env.SENTRY_RELEASE,
-    // })
-
 app.mount('#app')

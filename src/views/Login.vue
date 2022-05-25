@@ -55,9 +55,14 @@ export default {
           axios.post('/adminUser/login', {
             userName: state.ruleForm.username || '',
             passwordMd5: md5(state.ruleForm.password)
+          // axios.post('/admin/login', {
+          //   name: state.ruleForm.username || '',
+          //   password: state.ruleForm.password
           }).then(res => {
             localSet('token', res)
             window.location.href = '/'
+          }).catch(res => {
+            console.log(res)
           })
         } else {
           console.log('error submit!!')
