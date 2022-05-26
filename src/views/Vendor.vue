@@ -13,7 +13,7 @@
         
         <!-- <el-button type="primary" size="small" icon="el-icon-edit">修改订单</el-button> -->
         <el-button type="primary" size="small" icon="el-icon-search" @click="handleConfig()">搜索</el-button>
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="handleSend()">新增商家</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd()">新增商家</el-button>
       </div>
     </template>
 
@@ -107,6 +107,13 @@ import axios from '@/utils/axios'
 //     }
 // }
 
+  export default {
+    methods: {
+      handleAdd(){
+        this.$router.push({path: '/addVendor'})
+      },
+    }
+  }
 </script>
 
 <style scoped>
