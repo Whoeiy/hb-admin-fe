@@ -99,7 +99,12 @@ const router = createRouter({
       path: '/vendor',
       name: 'vendor',
       component: () => import(/* webpackChunkName: "vendor" */ '../views/Vendor.vue')
-    }
+    },
+    {
+      path: '/addVendor',
+      name: 'addVendor',
+      component: () => import(/* webpackChunkName: "vendor" */ '../views/addVendor.vue')
+    },
 
   ]
 })
