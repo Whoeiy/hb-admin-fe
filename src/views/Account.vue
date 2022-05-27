@@ -63,7 +63,7 @@ export default {
       },
     })
     onMounted(() => {
-      axios.get('/adminUser/profile').then(res => {
+      axios.get('/admin/profile').then(res => {
         state.user = res
         state.nameForm.loginName = res.loginUserName
         state.nameForm.nickName = res.nickName
