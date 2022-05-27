@@ -3,10 +3,10 @@
     <el-card class="add-container">
       <el-form :model="goodForm" :rules="rules" ref="goodRef" label-width="150px" class="goodForm">
         <el-form-item label="商家中文名称" prop="goodsName">
-          <el-input style="width: 300px" v-model="goodForm.goodsName" placeholder="请输入商品名称"></el-input>
+          <el-input style="width: 300px" v-model="goodForm.goodsName" placeholder="请输入商家中文名称"></el-input>
         </el-form-item>
         <el-form-item label="商家英文名称" prop="goodsEnName">
-          <el-input style="width: 300px" v-model="goodForm.goodsEnName" placeholder="请输入商品名称"></el-input>
+          <el-input style="width: 300px" v-model="goodForm.goodsEnName" placeholder="请输入商家英文名称"></el-input>
         </el-form-item>
         <el-form-item label="商家logo" prop="goodsCoverImg">
           <el-upload
@@ -25,10 +25,10 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="商家简介" prop="goodsIntro">
-          <el-input style="width: 300px" type="textarea" v-model="goodForm.goodsIntro" placeholder="请输入商品简介(最长300字符)"></el-input>
+          <el-input style="width: 300px" type="textarea" v-model="goodForm.goodsIntro" placeholder="请输入商家简介(最长300字符)"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sortNum">
-          <el-input min="0" style="width: 300px" v-model.number="goodForm.sortNum" placeholder="请输入商品售价"></el-input>
+          <el-input min="0" style="width: 300px" v-model.number="goodForm.sortNum" placeholder="请输入商家排序"></el-input>
         </el-form-item>
         <el-form-item label="是否显示" prop="goodsSellStatus">
           <el-radio-group v-model="goodForm.goodsSellStatus">
@@ -42,7 +42,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitAdd()">{{ id ? '立即修改' : '立即创建' }}</el-button>
-          <el-button @click="resetForm('goodRef')">重置</el-button>
+          <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -227,8 +227,10 @@ export default {
     const handleChangeCate = (val) => {
       state.categoryId = val[2] || 0
     }
-    const resetForm = (formName) => {
-      this.$refs[formName].resetFields();
+    const resetForm = () => {
+      //console.log(this);
+      //this.$ref.goodRef.resetFields();
+      goodRef.value.resetFields();
     }
     return {
       ...toRefs(state),
