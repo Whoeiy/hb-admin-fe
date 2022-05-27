@@ -34,11 +34,11 @@ export default ({ mode }) =>  defineConfig({
     proxy: {
       '/api': {
         // yy: 原服务器接口
-        // target: 'http://backend-api-02.newbee.ltd/manage-api/v1',
+        target: 'http://backend-api-02.newbee.ltd/manage-api/v1',
         // yy: 本地接口
         // target: 'http://localhost:8080/',
         // yy: aliyun服务器接口
-        target: 'http://101.133.131.175:8080/',
+        // target: 'http://101.133.131.175:8080/',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')
       }
