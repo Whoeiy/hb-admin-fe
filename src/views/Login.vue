@@ -52,12 +52,12 @@ export default {
     const submitForm = async () => {
       loginForm.value.validate((valid) => {
         if (valid) {
-          axios.post('/adminUser/login', {
-            userName: state.ruleForm.username || '',
-            passwordMd5: md5(state.ruleForm.password)
-          // axios.post('/admin/login', {
-          //   name: state.ruleForm.username || '',
-          //   password: state.ruleForm.password
+          // axios.post('/adminUser/login', {
+          //   userName: state.ruleForm.username || '',
+          //   passwordMd5: md5(state.ruleForm.password)
+          axios.post('/admin/login', {
+            name: state.ruleForm.username || '',
+            password: state.ruleForm.password
           }).then(res => {
             localSet('token', res)
             window.location.href = '/'
