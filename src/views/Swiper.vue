@@ -108,7 +108,7 @@ export default {
     // 获取轮播图列表
     const getCarousels = () => {
       state.loading = true
-      axios.get('/carousels', {
+      axios.get('/admin/carousels', {
         params: {
           pageNumber: state.currentPage,
           pageSize: state.pageSize
@@ -140,7 +140,7 @@ export default {
         ElMessage.error('请选择项')
         return
       }
-      axios.delete('/carousels', {
+      axios.delete('/admin/carousels', {
         data: {
           ids: state.multipleSelection.map(i => i.carouselId)
         }
@@ -151,7 +151,7 @@ export default {
     }
     // 单个删除
     const handleDeleteOne = (id) => {
-      axios.delete('/carousels', {
+      axios.delete('/admin/carousels', {
         data: {
           ids: [id]
         }

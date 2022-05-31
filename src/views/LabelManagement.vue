@@ -20,69 +20,77 @@
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange">
+
       <el-table-column
-          type="selection"
-          width="55">
+                       prop="labelid"
+                       label="编号"
+                       width="50"
+      >
       </el-table-column>
       <el-table-column
           label="标签名称"
-          width="200">
-        <template #default="scope">
-          <img style="width: 150px;height: 150px" :src="scope.row.carouselUrl" alt="轮播图">
-        </template>
-      </el-table-column>
-      <el-table-column
-          label=""
+          width="110"
+          prop="labelname"
       >
 
       </el-table-column>
+
       <el-table-column
-          prop="carouselRank"
+          prop="labelrank"
           label="排序值"
-          width="120"
+          width="50"
       >
       </el-table-column>
       <el-table-column
-          prop="createTime"
+          prop="createtime"
           label="添加时间"
-          width="200"
+          width="100"
+      >
+      </el-table-column>
+
+      <el-table-column
+          prop="createuser"
+          label="添加用户"
+          width="100"
+      >
+      </el-table-column>
+      <el-table-column
+          prop="updateuser"
+          label="更新时间"
+          width="100"
       >
       </el-table-column>
       <el-table-column
           label="操作"
           width="100"
       >
-        <template #default="scope">
-          <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.carouselId)">修改</a>
-          <el-popconfirm
-              title="确定删除吗？"
-              @confirm="handleDeleteOne(scope.row.carouselId)"
-          >
-            <template #reference>
-              <a style="cursor: pointer">删除</a>
-            </template>
-          </el-popconfirm>
-        </template>
+        <el-button
+            size="mini"
+            @click="handleEdit()">编辑
+        </el-button>
+        <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete()">删除
+        </el-button>
+
+
       </el-table-column>
+
     </el-table>
-    <!--总数超过一页，再展示分页器-->
-    <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="total"
-        :page-size="pageSize"
-        :current-page="currentPage"
-        @current-change="changePage"
-    />
-  </el-card>
-  <DialogAddLabel ref='addGood' :reload="getCarousels" :type="type" />
-</template>
+
+
+ </el-card>
+
+ </template>
 
 <script>
 import { onMounted, reactive, ref, toRefs } from 'vue'
-import { ElMessage } from 'element-plus'
-import DialogAddLabel from '@/components/DialogAddLabel.vue'
 import axios from '@/utils/axios'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+import DialogAddLabel from '@/components/DialogAddLabel.vue'
+
 export default {
   name: 'LabelManagement',
   components: {
@@ -101,12 +109,13 @@ export default {
       type: 'add', // 操作类型
     })
     onMounted(() => {
-      getCarousels()
+      getLabels()
     })
     // 获取轮播图列表
-    const getCarousels = () => {
+    const getLabels = () => {
       state.loading = true
-      axios.get('/carousels', {
+      console.log(res)
+      axios.get('/admin/label', {
         params: {
           pageNumber: state.currentPage,
           pageSize: state.pageSize
@@ -119,15 +128,16 @@ export default {
       })
     }
     // 添加轮播项
-    const handleAdd = () => {
-      state.type = 'add'
-      addGood.value.open()
+    const handleAdd = () =>{
+      router.push({path: '/addLabel'})
     }
+
     // 修改轮播图
-    const handleEdit = (id) => {
-      state.type = 'edit'
-      addGood.value.open(id)
+    const handleEdit = () =>{
+      router.push({path: '/addLabel'})
     }
+
+
     // 选择项
     const handleSelectionChange = (val) => {
       state.multipleSelection = val
@@ -138,7 +148,7 @@ export default {
         ElMessage.error('请选择项')
         return
       }
-      axios.delete('/carousels', {
+      axios.delete('/admin/label', {
         data: {
           ids: state.multipleSelection.map(i => i.carouselId)
         }
@@ -149,7 +159,7 @@ export default {
     }
     // 单个删除
     const handleDeleteOne = (id) => {
-      axios.delete('/carousels', {
+      axios.delete('/admin/label', {
         data: {
           ids: [id]
         }
@@ -171,7 +181,7 @@ export default {
       handleEdit,
       handleDelete,
       handleDeleteOne,
-      getCarousels,
+      getLabels,
       changePage
     }
   }
