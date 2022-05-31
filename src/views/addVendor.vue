@@ -1,14 +1,14 @@
 <template>
   <div class="add">
     <el-card class="add-container">
-      <el-form :model="goodForm" :rules="rules" ref="goodRef" label-width="150px" class="goodForm">
-        <el-form-item label="商家中文名称" prop="goodsName">
-          <el-input style="width: 300px" v-model="goodForm.goodsName" placeholder="请输入商家中文名称"></el-input>
+      <el-form :model="vendorForm" :rules="rules" ref="vendorRef" label-width="150px" class="vendorForm">
+        <el-form-item label="商家中文名称" prop="nameCn">
+          <el-input style="width: 300px" v-model="vendorForm.nameCn" placeholder="请输入商家中文名称"></el-input>
         </el-form-item>
-        <el-form-item label="商家英文名称" prop="goodsEnName">
-          <el-input style="width: 300px" v-model="goodForm.goodsEnName" placeholder="请输入商家英文名称"></el-input>
+        <el-form-item label="商家英文名称" prop="nameEn">
+          <el-input style="width: 300px" v-model="vendorForm.nameEn" placeholder="请输入商家英文名称"></el-input>
         </el-form-item>
-        <el-form-item label="商家logo" prop="goodsCoverImg">
+        <el-form-item label="商家logo" prop="logoUrl">
           <el-upload
             class="avatar-uploader"
             :action="uploadImgServer"
@@ -20,26 +20,23 @@
             :before-upload="handleBeforeUpload"
             :on-success="handleUrlSuccess"
           >
-            <img style="width: 100px; height: 100px; border: 1px solid #e9e9e9;" v-if="goodForm.goodsCoverImg" :src="goodForm.goodsCoverImg" class="avatar">
+            <img style="width: 100px; height: 100px; border: 1px solid #e9e9e9;" v-if="vendorForm.logoUrl" :src="vendorForm.logoUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="商家简介" prop="goodsIntro">
-          <el-input style="width: 300px" type="textarea" v-model="goodForm.goodsIntro" placeholder="请输入商家简介(最长300字符)"></el-input>
+        <el-form-item label="商家简介" prop="store">
+          <el-input style="width: 300px" type="textarea" v-model="vendorForm.store" placeholder="请输入商家简介(最长300字符)"></el-input>
         </el-form-item>
-        <el-form-item label="排序" prop="sortNum">
-          <el-input min="0" style="width: 300px" v-model.number="goodForm.sortNum" placeholder="请输入商家排序"></el-input>
+        <el-form-item label="排序" prop="showRank">
+          <el-input min="0" style="width: 300px" v-model.number="vendorForm.showRank" placeholder="请输入商家排序"></el-input>
         </el-form-item>
-        <el-form-item label="是否显示" prop="goodsSellStatus">
-          <el-radio-group v-model="goodForm.goodsSellStatus">
+        <el-form-item label="是否显示" prop="isShown">
+          <el-radio-group v-model="vendorForm.isShown">
             <el-radio label="1">是</el-radio>
             <el-radio label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        
-        <el-form-item label="详情内容">
-          <div ref='editor'></div>
-        </el-form-item>
+
         <el-form-item>
           <el-button type="primary" @click="submitAdd()">{{ id ? '立即修改' : '立即创建' }}</el-button>
           <el-button @click="resetForm">重置</el-button>
@@ -57,12 +54,12 @@ import { ElMessage } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import { localGet, uploadImgServer, uploadImgsServer, hasEmoji } from '@/utils'
 export default {
-  name: 'AddGood',
+  name: 'AddVendor',
   setup() {
     const { proxy } = getCurrentInstance()
     console.log('proxy', proxy)
     const editor = ref(null)
-    const goodRef = ref(null)
+    const vendorRef = ref(null)
     const route = useRoute()
     const router = useRouter()
     const { id } = route.query
@@ -71,143 +68,78 @@ export default {
       token: localGet('token') || '',
       id: id,
       defaultCate: '',
-      goodForm: {
-        goodsName: '',
-        goodsEnName: '',
-        goodsCoverImg: '',
-        goodsIntro: '',
-        sortNum: '0',
-        goodsSellStatus: '1',
+      vendorForm: {
+        nameCn: '',
+        nameEn: '',
+        logoUrl: '',
+        store: '',
+        showRank: 0,
+        isShown: '1',
       },
       rules: {
-        goodsName: [
+        nameCn: [
           { required: 'true', message: '请填写商家中文名称', trigger: ['change'] },
           { max: 16, message: '长度需小于16个字符', trigger: 'blur'}
         ],
-        goodsEnName: [
+        nameEn: [
           { required: 'true', message: '请填写商家英文名称', trigger: ['change'] },
           { max: 16, message: '长度需小于16个字符', trigger: 'blur'}
         ],
-        sortNum: [
+        showRank: [
           { type: 'number', message: '排序必须为数字值'}
         ],
       },
-      categoryId: '',
-      category: {
-        lazy: true,
-        lazyLoad(node, resolve) {
-          const { level = 0, value } = node
-          axios.get('/categories', {
-            params: {
-              pageNumber: 1,
-              pageSize: 1000,
-              categoryLevel: level + 1,
-              parentId: value || 0
-            }
-          }).then(res => {
-            const list = res.list
-            const nodes = list.map(item => ({
-              value: item.categoryId,
-              label: item.categoryName,
-              leaf: level > 1
-            }))
-            resolve(nodes)
-          })
-        }
-      }
+
     })
-    let instance
+
     onMounted(() => {
-      instance = new WangEditor(editor.value)
-      instance.config.showLinkImg = false
-      instance.config.showLinkImgAlt = false
-      instance.config.showLinkImgHref = false
-      instance.config.uploadImgMaxSize = 2 * 1024 * 1024 // 2M
-      instance.config.uploadFileName = 'file'
-      instance.config.uploadImgHeaders = {
-        token: state.token
-      }
-      // 图片返回格式不同，需要自定义返回格式
-      instance.config.uploadImgHooks = {
-        // 图片上传并返回了结果，想要自己把图片插入到编辑器中
-        // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
-        customInsert: function(insertImgFn, result) {
-          console.log('result', result)
-          // result 即服务端返回的接口
-          // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
-          if (result.data && result.data.length) {
-            result.data.forEach(item => insertImgFn(item))
-          }
-        }
-      }
-      instance.config.uploadImgServer = uploadImgsServer
-      Object.assign(instance.config, {
-        onchange() {
-          console.log('change')
-        },
-      })
-      instance.create()
       if (id) {
-        axios.get(`/goods/${id}`).then(res => {
-          const { goods, firstCategory, secondCategory, thirdCategory } = res
-          state.goodForm = {
-            goodsName: goods.goodsName,
-            goodsIntro: goods.goodsIntro,
-            originalPrice: goods.originalPrice,
-            sellingPrice: goods.sellingPrice,
-            stockNum: goods.stockNum,
-            goodsSellStatus: String(goods.goodsSellStatus),
-            goodsCoverImg: proxy.$filters.prefix(goods.goodsCoverImg),
-            tag: goods.tag,
-            categoryId: goods.goodsCategoryId
+        axios.get(`/admin/vendor/${id}`).then(res => {
+          const { vendors } = res
+          state.vendorForm = {
+            nameCn: vendors.nameCn,
+            nameEn: vendors.nameEn,
+            logoUrl: proxy.$filters.prefix(goods.logoUrl),
+            store: goods.store,
+            showRank: goods.showRank,
+            isShown: String(goods.isShown),
           }
-          state.categoryId = goods.goodsCategoryId
-          state.defaultCate = `${firstCategory.categoryName}/${secondCategory.categoryName}/${thirdCategory.categoryName}`
-          if (instance) {
-            // 初始化商品详情 html
-            instance.txt.html(goods.goodsDetailContent)
-          }
+          console.log(res)
         })
       }
     })
-    onBeforeUnmount(() => {
-      instance.destroy()
-      instance = null
-    })
+
     const submitAdd = () => {
-      goodRef.value.validate((vaild) => {
+      vendorRef.value.validate((vaild) => {
         if (vaild) {
           // 默认新增用 post 方法
           let httpOption = axios.post
           let params = {
-            goodsCategoryId: state.categoryId,
-            goodsCoverImg: state.goodForm.goodsCoverImg,
-            goodsDetailContent: instance.txt.html(),
-            goodsIntro: state.goodForm.goodsIntro,
-            goodsName: state.goodForm.goodsName,
-            goodsSellStatus: state.goodForm.goodsSellStatus,
-            originalPrice: state.goodForm.originalPrice,
-            sellingPrice: state.goodForm.sellingPrice,
-            stockNum: state.goodForm.stockNum,
-            tag: state.goodForm.tag
+            vendorId: state.vendorForm.vendorId,
+            nameCn: state.vendorForm.nameCn,
+            nameEn: state.vendorForm.nameEn,
+            logoUrl: state.vendorForm.logoUrl,
+            store: state.vendorForm.store,
+            showRank: state.vendorForm.showRank,
+            isShown: state.vendorForm.isShown,
           }
-          if (hasEmoji(params.goodsIntro) || hasEmoji(params.goodsName) || hasEmoji(params.tag) || hasEmoji(params.goodsDetailContent)) {
+          if (hasEmoji(params.store) || hasEmoji(params.nameCn) || hasEmoji(params.tag)) {
             ElMessage.error('不要输入表情包，再输入就打死你个龟孙儿~')
             return
           }
-          if (params.goodsIntro.length > 300) {
+          if (params.store.length > 300) {
             ElMessage.error('商家简介不能超过300个字符')
             return
           }
           console.log('params', params)
           if (id) {
-            params.goodsId = id
+            params.vendorId = id
             // 修改商品使用 put 方法
             httpOption = axios.put
           }
-          httpOption('/goods', params).then(() => {
+          httpOption('admin/vendor', params).then(() => {
             ElMessage.success(id ? '修改成功' : '添加成功')
-            router.push({ path: '/good' })
+            router.push({ path: '/vendor' })
           })
         }
       })
@@ -222,24 +154,19 @@ export default {
       }
     }
     const handleUrlSuccess = (val) => {
-      state.goodForm.goodsCoverImg = val.data || ''
+      state.vendorForm.logoUrl = val.data || ''
     }
-    const handleChangeCate = (val) => {
-      state.categoryId = val[2] || 0
-    }
+
     const resetForm = () => {
-      //console.log(this);
-      //this.$ref.goodRef.resetFields();
-      goodRef.value.resetFields();
+      vendorRef.value.resetFields();
     }
     return {
       ...toRefs(state),
-      goodRef,
+      vendorRef,
       submitAdd,
       handleBeforeUpload,
       handleUrlSuccess,
       editor,
-      handleChangeCate,
       resetForm,
     }
   }
