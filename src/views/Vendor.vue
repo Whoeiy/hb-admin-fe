@@ -5,6 +5,8 @@
         <el-input
           style="width: 200px; margin-right: 10px"
           placeholder="请输入商家英文名称"
+          v-model="nameEn"
+          @change="handleOption"
           size="small"
           clearable
         />
@@ -45,37 +47,40 @@
       >
       </el-table-column>
       
-      <el-table-column align="center"
-        label="是否显示"
-      >
-      <!-- <template #default="scope">
-        <el-switch
-          @change="handleShowStatusChange(scope.$index, scope.row)"
-          :active-value="1"
-          :inactive-value="0"
-          v-model="scope.row.isShown"
-          active-color="#13ce66"
-          inactive-color="#ff4949">
-        </el-switch>
-      </template> -->
+      <el-table-column align="center" label="是否显示">
+      <template #default="scope">
+        <a style="cursor: pointer; margin-right: 10px" v-if="scope.row.isShown == 0" @click="handleStatus(scope.row.vendorId, 1)">不显示</a>
+        <a style="cursor: pointer; margin-right: 10px" v-else @click="handleStatus(scope.row.vendorId, 0)">显示</a>
+      </template>
       </el-table-column>
 
-      <el-table-column label="操作" width="200" align="center">  
+      <el-table-column label="操作" width="200" align="center">
+        <template #default="scope">  
         <el-button
             size="mini"
-            @click="handleUpdate()">编辑
+            @click="handleEdit(scope.row.vendorId)">编辑
         </el-button>
-        <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete()">删除
-        </el-button>
-        
+        <el-popconfirm
+            title="确定删除吗？"
+            @confirm="handleDeleteOne(scope.row.vendorId)">
+            <template #reference>
+              <el-button size="mini" type="danger">删除
+              </el-button>
+            </template>
+          </el-popconfirm>
+        </template>
       </el-table-column>
       
       
     </el-table>
-
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="pageSize"
+      :current-page="currentPage"
+      @current-change="changePage"
+    />
     
   </el-card>
 </template>
@@ -99,7 +104,8 @@ export default {
       multipleSelection: [], // 选中项
       total: 0, // 总条数
       currentPage: 1, // 当前页
-      pageSize: 10 // 分页大小
+      pageSize: 10, // 分页大小
+      nameEn: ''
     })
     onMounted(() => {
       getVendorList()
@@ -110,7 +116,8 @@ export default {
       axios.get('/admin/vendor', {
         params: {
           pageNum: state.currentPage,
-          pageSize: state.pageSize
+          pageSize: state.pageSize,
+          nameEn: state.nameEn,
         }
       }).then(res => {
         state.tableData = res.list
@@ -130,34 +137,60 @@ export default {
     const handleUpdate = () =>{
         router.push({path: '/addVendor'})
     }
+    const handleStatus = (id, status) => {
+      axios.put(`admin/vendor/showStatus?vendorId=${id}&showStatus=${status}`, {
+        ids: id ? [id] : []
+      }).then(() => {
+        ElMessage.success('修改成功')
+        getVendorList()
+      })
+    }
+    const changePage = (val) => {
+      state.currentPage = val
+      getVendorList()
+    }
+    const handleDeleteOne = (id) => {
+      axios.delete(`/admin/vendor/${id}`, {
+        data: {
+          ids: [id]
+        }
+      }).then(() => {
+        ElMessage.success('删除成功')
+        getVendorList()
+      })
+    }
 
+    const handleOption = () => {
+      state.currentPage = 1
+      state.nameEn = nameEn
+      getVendorList()
+    }
 
-    // handleShowStatusChange = (index, row) => {
-    //     let data = new URLSearchParams();
-    //     data.append("ids", row.id);
-    //     data.append("showStatus", row.showStatus);
-    //     updateShowStatus(data).then(response => {
-    //       this.$message({
-    //         message: '修改成功',
-    //         type: 'success',
-    //         duration: 1000
-    //       });
-    //     }).catch(error => {
-    //       if (row.showStatus === 0) {
-    //         row.showStatus = 1;
-    //       } else {
-    //         row.showStatus = 0;
-    //       }
-    //     });
-    //   }
+    const handleConfig = () => {
+      console.log('nameEn', state.nameEn)
+      //let params
+      axios.put(`/admin/vendor?pageNum=${state.pageNum}&pageSize=${state.pageSize}&keyword=${state.nameEn}`, {
+        //ids: params
+      }).then(() => {
+        getVendorList()
+      })
+    }
 
+    const handleEdit = (id) => {
+      router.push({ path: '/addVendor', query: { id } })
+    }
     
     return {
       ...toRefs(state),
       getVendorList,
       handleAdd,
-      handleUpdate
-      //handleShowStatusChange
+      handleUpdate,
+      handleStatus,
+      changePage,
+      handleDeleteOne,
+      handleOption,
+      handleConfig,
+      handleEdit
       
     }
   }
