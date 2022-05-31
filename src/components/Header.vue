@@ -68,6 +68,9 @@ export default {
       if (id && to.name == 'add') {
         state.name = '编辑商品'
       }
+      if (id && to.name == 'addVendor') {
+        state.name = '编辑商家'
+      }
       state.hasBack = ['level2', 'level3', 'order_detail'].includes(to.name)
     })
     return {
