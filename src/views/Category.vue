@@ -113,22 +113,23 @@ export default {
     })
     // 获取分类列表
     const getCategory = () => {
-      const { level = 1, parent_id = 0 } = route.query
+      const { level = 1, parentId = 0 } = route.query
+      console.log(route.query)
       state.loading = true
-      axios.get('/admin/categories', {
+      axios.get('/admin/categories/level', {
         params: {
           currentPage: state.currentPage,
           pageSize: state.pageSize,
           categoryLevel:  level,
-          parentId: parent_id
+          parentId: parentId
         }
       }).then(res => {
         state.tableData = res.list
         state.total = res.totalCount
         state.currentPage = res.currPage
         state.loading = false
-        state.level = level
-        state.parentId = parent_id
+        state.categorylevel = level
+        state.parentId = parentId
       })
     }
     // 添加分类
@@ -176,7 +177,7 @@ export default {
       getCategory()
     }
     const handleNext = (item) => {
-      const levelNumber = item.categoryLevel + 1
+      const levelNumber = item.categorylevel + 1
       if (levelNumber == 4) {
         ElMessage.error('没有下一级')
         return
@@ -185,7 +186,7 @@ export default {
         name: `level${levelNumber}`,
         query: {
           level: levelNumber,
-          parent_id: item.categoryId
+          parentId: item.categoryid
         }
       })
     }

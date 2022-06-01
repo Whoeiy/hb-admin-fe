@@ -6,9 +6,24 @@
       @close="handleClose"
   >
     <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="good-form">
-
-      <el-form-item label="商品标签" prop="label">
-        <el-input type="text" v-model="ruleForm.label"></el-input>
+      <!-- <el-form-item label="图片" prop="url">
+         <el-upload
+           class="avatar-uploader"
+           :action="uploadImgServer"
+           accept="jpg,jpeg,png"
+           :headers="{
+             token: token
+           }"
+           :show-file-list="false"
+           :before-upload="handleBeforeUpload"
+           :on-success="handleUrlSuccess"
+         >
+           <img style="width: 200px; height: 100px; border: 1px solid #e9e9e9;" v-if="ruleForm.url" :src="ruleForm.url" class="avatar">
+           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+         </el-upload>
+       </el-form-item>-->
+      <el-form-item label="标签" prop="link">
+        <el-input type="text" v-model="ruleForm.link"></el-input>
       </el-form-item>
 
       <el-form-item label="排序值" prop="sort">
@@ -43,14 +58,13 @@ export default {
       token: localGet('token') || '',
       visible: false,
       ruleForm: {
-        label:'',
-        url: '',
+
         link: '',
         sort: ''
       },
       rules: {
-        label: [
-          { required: 'true', message: 'Label不能为空', trigger: ['change'] }
+        link: [
+          { required: 'true', message: '标签名不能为空', trigger: ['change'] }
         ],
         sort: [
           { required: 'true', message: '排序不能为空', trigger: ['change'] }
@@ -60,9 +74,9 @@ export default {
     })
     // 获取详情
     const getDetail = (id) => {
-      axios.get(`/carousels/${id}`).then(res => {
+      axios.get(`/admin/label/${id}`).then(res => {
         state.ruleForm = {
-          url: res.carouselUrl,
+
           link: res.redirectUrl,
           sort: res.carouselRank
         }
@@ -87,7 +101,7 @@ export default {
         getDetail(id)
       } else {
         state.ruleForm = {
-          url: '',
+
           link: '',
           sort: ''
         }
@@ -105,11 +119,12 @@ export default {
       formRef.value.validate((valid) => {
         if (valid) {
           if (hasEmoji(state.ruleForm.link)) {
-            ElMessage.error('不要输入xxx')
+            ElMessage.error('不要输入表情包，再输入就打死你个龟孙儿~')
             return
           }
+
           if (props.type == 'add') {
-            axios.post('/carousels', {
+            axios.post('/admin/label', {
               carouselUrl: state.ruleForm.url,
               redirectUrl: state.ruleForm.link,
               carouselRank: state.ruleForm.sort
@@ -119,7 +134,7 @@ export default {
               if (props.reload) props.reload()
             })
           } else {
-            axios.put('/carousels', {
+            axios.put('/admin/label', {
               carouselId: state.id,
               carouselUrl: state.ruleForm.url,
               redirectUrl: state.ruleForm.link,

@@ -57,7 +57,7 @@ export default {
     })
     // 获取详情
     const getDetail = (id) => {
-      axios.get(`/categories/${id}`).then(res => {
+      axios.get(`/admin/categories/level/${id}`).then(res => {
         state.ruleForm = {
           name: res.categoryName,
           rank: res.categoryRank
@@ -75,6 +75,7 @@ export default {
       } else {
         // 新增类目，从路由获取父分类id 和 分类级别
         const { level = 1, parent_id = 0 } = route.query
+        console.log(route.query)
         state.ruleForm = {
           name: '',
           rank: ''
@@ -94,7 +95,7 @@ export default {
       formRef.value.validate((valid) => {
         if (valid) {
           if (hasEmoji(state.ruleForm.name)) {
-            ElMessage.error('不要输入表情包，再输入就打死你个龟孙儿~')
+            ElMessage.error('不要输入表情包')
             return
           }
           if (state.ruleForm.name.length > 16) {
@@ -106,7 +107,7 @@ export default {
             return
           }
           if (props.type == 'add') {
-            axios.post('/categories', {
+            axios.post('/admin/categories', {
               categoryLevel: state.categoryLevel,
               parentId: state.parentId,
               categoryName: state.ruleForm.name,
@@ -117,7 +118,7 @@ export default {
               if (props.reload) props.reload()
             })
           } else {
-            axios.put('/categories', {
+            axios.put('/admin/categories', {
               categoryId: state.id,
               categoryLevel: state.categoryLevel,
               parentId: state.parentId,

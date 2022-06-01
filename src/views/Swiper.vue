@@ -24,61 +24,58 @@
         type="selection"
         width="55">
       </el-table-column>
-<!-- <el-table-column
-        label="轮播图"
-        width="200">
-        <template #default="scope">
-          <img style="width: 150px;height: 150px" :src="scope.row.carouselUrl" alt="轮播图">
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="跳转链接"
-        >
-        <template #default="scope">
-          <a target="_blank" :href="scope.row.redirectUrl">{{ scope.row.redirectUrl }}</a>
-        </template>
-      </el-table-column> 
+      <!--
+<el-table-column
+   label="轮播图"
+   width="200">
+   <template #default="scope">
+     <img style="width: 150px;height: 150px" :src="scope.row.carouselUrl" alt="轮播图">
+   </template>
+</el-table-column>
+<el-table-column
+    label="跳转链接"
+    >
+    <template #default="scope">
+      <a target="_blank" :href="scope.row.redirectUrl">{{ scope.row.redirectUrl }}</a>
+    </template>
+  </el-table-column>
 
-      <el-table-column
-          prop="carouselId"
-          label="标号"
-          width="220"
-      >
-      </el-table-column>
+
+      </el-table-column>-->
       <el-table-column
           prop="imgUrl"
           label="轮播图"
-          width="220"
+          width="300"
       >
       </el-table-column>
       <el-table-column
           prop="jumpUrl"
           label="跳转地址"
-          width="220"
+          width="250"
       >
       </el-table-column>
--->
-      <el-table-column
+
+      <el-table-column align="center"
         prop="showRank"
         label="排序值"
-        width="220"
-      >
-      </el-table-column><!--
-      <el-table-column
-          prop="isDeleted"
-          label="添加时间"
-          width="260"
+        width="150"
       >
       </el-table-column>
-      <el-table-column
+      <el-table-column align="center"
+          prop="isDeleted"
+          label="是否删除"
+          width="100"
+      >
+      </el-table-column>
+      <el-table-column align="center"
         prop="createTime"
         label="添加时间"
-        width="260"
+        width="200"
       >
       </el-table-column>
       <el-table-column
         label="操作"
-        width="100"
+        width="200"
       >
         <template #default="scope">
           <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.carouselId)">修改</a>
@@ -91,7 +88,7 @@
             </template>
           </el-popconfirm>
         </template>
-      </el-table-column>-->
+      </el-table-column>
     </el-table>
     <!--总数超过一页，再展示分页器-->
     <el-pagination
@@ -139,10 +136,10 @@ export default {
           pageNumber: state.currentPage,
           pageSize: state.pageSize
         }
-      }).then(res => {
-        state.tableData = res.list
-        state.total = res.totalCount
-        state.currentPage = res.currPage
+      }).then(res => {  console.log(res)
+        state.tableData = res
+       //state.total = res.totalCount
+       // state.currentPage = res.currPage
         state.loading = false
       })
 
@@ -177,8 +174,9 @@ export default {
       })
     }
     // 单个删除
+
     const handleDeleteOne = (id) => {
-      axios.delete('/admin/carousels', {
+      axios.delete(`/admin/carousel/${id}`, {
         data: {
           ids: [id]
         }

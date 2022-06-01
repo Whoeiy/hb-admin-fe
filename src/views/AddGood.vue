@@ -110,7 +110,7 @@ export default {
         lazy: true,
         lazyLoad(node, resolve) {
           const { level = 0, value } = node
-          axios.get('/categories', {
+          axios.get('/admin/categories', {
             params: {
               pageNumber: 1,
               pageSize: 1000,
