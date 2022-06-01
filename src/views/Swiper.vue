@@ -24,7 +24,7 @@
         type="selection"
         width="55">
       </el-table-column>
-      <el-table-column
+<!-- <el-table-column
         label="轮播图"
         width="200">
         <template #default="scope">
@@ -37,17 +37,43 @@
         <template #default="scope">
           <a target="_blank" :href="scope.row.redirectUrl">{{ scope.row.redirectUrl }}</a>
         </template>
+      </el-table-column> 
+
+      <el-table-column
+          prop="carouselId"
+          label="标号"
+          width="220"
+      >
       </el-table-column>
       <el-table-column
-        prop="carouselRank"
+          prop="imgUrl"
+          label="轮播图"
+          width="220"
+      >
+      </el-table-column>
+      <el-table-column
+          prop="jumpUrl"
+          label="跳转地址"
+          width="220"
+      >
+      </el-table-column>
+-->
+      <el-table-column
+        prop="showRank"
         label="排序值"
-        width="120"
+        width="220"
+      >
+      </el-table-column><!--
+      <el-table-column
+          prop="isDeleted"
+          label="添加时间"
+          width="260"
       >
       </el-table-column>
       <el-table-column
         prop="createTime"
         label="添加时间"
-        width="200"
+        width="260"
       >
       </el-table-column>
       <el-table-column
@@ -65,7 +91,7 @@
             </template>
           </el-popconfirm>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
     <!--总数超过一页，再展示分页器-->
     <el-pagination
@@ -119,6 +145,7 @@ export default {
         state.currentPage = res.currPage
         state.loading = false
       })
+
     }
     // 添加轮播项
     const handleAdd = () => {

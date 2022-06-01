@@ -26,18 +26,18 @@
       >
       </el-table-column>
       <el-table-column
-        prop="categoryName"
+        prop="categoryname"
         label="分类名称"
       >
       </el-table-column>
       <el-table-column
-        prop="categoryRank"
+        prop="categoryrank"
         label="排序值"
         width="120"
       >
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="createtime"
         label="添加时间"
         width="200"
       >
@@ -115,11 +115,11 @@ export default {
     const getCategory = () => {
       const { level = 1, parent_id = 0 } = route.query
       state.loading = true
-      axios.get('/categories', {
+      axios.get('/admin/categories', {
         params: {
-          pageNumber: state.currentPage,
+          currentPage: state.currentPage,
           pageSize: state.pageSize,
-          categoryLevel: level,
+          categoryLevel:  level,
           parentId: parent_id
         }
       }).then(res => {
@@ -151,7 +151,7 @@ export default {
         ElMessage.error('请选择项')
         return
       }
-      axios.delete('/categories', {
+      axios.delete('/admin/categories', {
         data: {
           ids: state.multipleSelection.map(i => i.categoryId)
         }
@@ -162,7 +162,7 @@ export default {
     }
     // 单个删除
     const handleDeleteOne = (id) => {
-      axios.delete('/categories', {
+      axios.delete('/admin/categories', {
         data: {
           ids: [id]
         }

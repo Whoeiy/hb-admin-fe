@@ -20,7 +20,11 @@
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange">
-
+      <el-table-column
+          type="selection"
+          width="55"
+      >
+      </el-table-column>
       <el-table-column
                        prop="labelid"
                        label="编号"
@@ -88,7 +92,7 @@
 import { onMounted, reactive, ref, toRefs } from 'vue'
 import axios from '@/utils/axios'
 import { ElMessage } from 'element-plus'
-import { useRouter } from 'vue-router'
+import {useRouter} from 'vue-router'
 import DialogAddLabel from '@/components/DialogAddLabel.vue'
 
 export default {
@@ -97,6 +101,8 @@ export default {
     DialogAddLabel
   },
   setup() {
+    const router = useRouter()
+
     const multipleTable = ref(null)
     const addGood = ref(null)
     const state = reactive({
@@ -125,6 +131,7 @@ export default {
         state.total = res.totalCount
         state.currentPage = res.currPage
         state.loading = false
+        console.log(res)
       })
     }
     // 添加轮播项
