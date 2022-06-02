@@ -61,10 +61,10 @@
           width="200"
       >
         <template #default="scope">
-          <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.carouselId)">修改</a>
+          <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.labelid)">修改</a>
           <el-popconfirm
               title="确定删除吗？"
-              @confirm="handleDeleteOne(scope.row.carouselId)"
+              @confirm="handleDeleteOne(scope.row.labelid)"
           >
             <template #reference>
               <a style="cursor: pointer">删除</a>
@@ -83,7 +83,7 @@
         @current-change="changePage"
     />
   </el-card>
-  <DialogAddSwiper ref='addGood' :reload="getCarousels" :type="type" />
+ <!-- <DialogAddLabel ref='addGood' :reload="getLabels" :type="type" />-->
 </template>
 
 <script>
@@ -149,7 +149,7 @@ export default {
       }
       axios.delete('/admin/label', {
         data: {
-          ids: state.multipleSelection.map(i => i.carouselId)
+          ids: state.multipleSelection.map(i => i.labelid)
         }
       }).then(() => {
         ElMessage.success('删除成功')

@@ -6,24 +6,9 @@
       @close="handleClose"
   >
     <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="good-form">
-      <!-- <el-form-item label="图片" prop="url">
-         <el-upload
-           class="avatar-uploader"
-           :action="uploadImgServer"
-           accept="jpg,jpeg,png"
-           :headers="{
-             token: token
-           }"
-           :show-file-list="false"
-           :before-upload="handleBeforeUpload"
-           :on-success="handleUrlSuccess"
-         >
-           <img style="width: 200px; height: 100px; border: 1px solid #e9e9e9;" v-if="ruleForm.url" :src="ruleForm.url" class="avatar">
-           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-         </el-upload>
-       </el-form-item>-->
-      <el-form-item label="标签" prop="link">
-        <el-input type="text" v-model="ruleForm.link"></el-input>
+
+      <el-form-item label="标签" prop="name">
+        <el-input type="text" v-model="ruleForm.name"></el-input>
       </el-form-item>
 
       <el-form-item label="排序值" prop="sort">
@@ -59,11 +44,11 @@ export default {
       visible: false,
       ruleForm: {
 
-        link: '',
+        name: '',
         sort: ''
       },
       rules: {
-        link: [
+        name: [
           { required: 'true', message: '标签名不能为空', trigger: ['change'] }
         ],
         sort: [
@@ -77,22 +62,13 @@ export default {
       axios.get(`/admin/label/${id}`).then(res => {
         state.ruleForm = {
 
-          link: res.redirectUrl,
-          sort: res.carouselRank
+          name: res.labelname,
+          sort: res.labelrank
         }
       })
     }
-    const handleBeforeUpload = (file) => {
-      const sufix = file.name.split('.')[1] || ''
-      if (!['jpg', 'jpeg', 'png'].includes(sufix)) {
-        ElMessage.error('请上传 jpg、jpeg、png 格式的图片')
-        return false
-      }
-    }
-    // 上传图片
-    const handleUrlSuccess = (val) => {
-      state.ruleForm.url = val.data || ''
-    }
+
+
     // 开启弹窗
     const open = (id) => {
       state.visible = true
@@ -102,7 +78,7 @@ export default {
       } else {
         state.ruleForm = {
 
-          link: '',
+          name: '',
           sort: ''
         }
       }
@@ -118,16 +94,16 @@ export default {
       console.log(formRef.value.validate)
       formRef.value.validate((valid) => {
         if (valid) {
-          if (hasEmoji(state.ruleForm.link)) {
-            ElMessage.error('不要输入表情包，再输入就打死你个龟孙儿~')
+          if (hasEmoji(state.ruleForm.name)) {
+            ElMessage.error('不要输入表情包')
             return
           }
 
           if (props.type == 'add') {
             axios.post('/admin/label', {
-              carouselUrl: state.ruleForm.url,
-              redirectUrl: state.ruleForm.link,
-              carouselRank: state.ruleForm.sort
+
+              labelname: state.ruleForm.name,
+              labelrank: state.ruleForm.sort
             }).then(() => {
               ElMessage.success('添加成功')
               state.visible = false
@@ -135,10 +111,10 @@ export default {
             })
           } else {
             axios.put('/admin/label', {
-              carouselId: state.id,
-              carouselUrl: state.ruleForm.url,
-              redirectUrl: state.ruleForm.link,
-              carouselRank: state.ruleForm.sort
+
+
+              labelname: state.ruleForm.name,
+              labelrank: state.ruleForm.sort
             }).then(() => {
               ElMessage.success('修改成功')
               state.visible = false

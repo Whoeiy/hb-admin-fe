@@ -51,7 +51,7 @@
           <a style="cursor: pointer; margin-right: 10px" @click="handleNext(scope.row)">下级分类</a>
           <el-popconfirm
             title="确定删除吗？"
-            @confirm="handleDeleteOne(scope.row.categoryId)"
+            @confirm="handleDeleteOne(scope.row.categoryid)"
           >
             <template #reference>
               <a style="cursor: pointer">删除</a>
@@ -162,8 +162,9 @@ export default {
       })
     }
     // 单个删除
+
     const handleDeleteOne = (id) => {
-      axios.delete('/admin/categories', {
+      axios.delete(`/admin/categories/${id}`, {
         data: {
           ids: [id]
         }
@@ -176,6 +177,7 @@ export default {
       state.currentPage = val
       getCategory()
     }
+
     const handleNext = (item) => {
       const levelNumber = item.categorylevel + 1
       if (levelNumber == 4) {

@@ -127,9 +127,9 @@ export default {
 
           if (props.type == 'add') {
             axios.post('/admin/carousel', {
-              carouselUrl: state.ruleForm.url,
-              redirectUrl: state.ruleForm.link,
-              carouselRank: state.ruleForm.sort
+           imgUrl: state.ruleForm.link,
+              jumpUrl: state.ruleForm.link,
+              showRank: state.ruleForm.sort
             }).then(() => {
               ElMessage.success('添加成功')
               state.visible = false
@@ -138,9 +138,9 @@ export default {
           } else {
             axios.put('/admin/carousel', {
               carouselId: state.id,
-              carouselUrl: state.ruleForm.url,
-              redirectUrl: state.ruleForm.link,
-              carouselRank: state.ruleForm.sort
+             imgUrl: state.ruleForm.link,
+              jumpUrl: state.ruleForm.link,
+              showRank: state.ruleForm.sort
             }).then(() => {
               ElMessage.success('修改成功')
               state.visible = false

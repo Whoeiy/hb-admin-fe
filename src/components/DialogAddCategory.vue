@@ -39,8 +39,8 @@ export default {
     const route = useRoute()
     const state = reactive({
       visible: false,
-      categoryLevel: 1,
-      parentId: 0,
+      categorylevel: 1,
+      parentid: 0,
       ruleForm: {
         name: '',
         rank: ''
@@ -59,11 +59,11 @@ export default {
     const getDetail = (id) => {
       axios.get(`/admin/categories/level/${id}`).then(res => {
         state.ruleForm = {
-          name: res.categoryName,
-          rank: res.categoryRank
+          name: res.categoryname,
+          rank: res.categoryrank
         }
         state.parentId = res.parentId
-        state.categoryLevel = res.categoryLevel
+        state.categorylevel = res.categorylevel
       })
     }
     // 开启弹窗
@@ -80,8 +80,8 @@ export default {
           name: '',
           rank: ''
         }
-        state.parentId = parent_id
-        state.categoryLevel = level
+        state.parentId = parentId
+        state.categorylevel = categorylevel
       }
     }
     // 关闭弹窗
@@ -108,8 +108,8 @@ export default {
           }
           if (props.type == 'add') {
             axios.post('/admin/categories', {
-              categoryLevel: state.categoryLevel,
-              parentId: state.parentId,
+              categoryLevel: state.categorylevel,
+              parentId: state.parentid,
               categoryName: state.ruleForm.name,
               categoryRank: state.ruleForm.rank
             }).then(() => {
@@ -119,11 +119,11 @@ export default {
             })
           } else {
             axios.put('/admin/categories', {
-              categoryId: state.id,
-              categoryLevel: state.categoryLevel,
-              parentId: state.parentId,
-              categoryName: state.ruleForm.name,
-              categoryRank: state.ruleForm.rank
+              categoryid: state.id,
+              categorylevel: state.categorylevel,
+              parentid: state.parentid,
+              categoryname: state.ruleForm.name,
+              categoryrank: state.ruleForm.rank
             }).then(() => {
               ElMessage.success('修改成功')
               state.visible = false
