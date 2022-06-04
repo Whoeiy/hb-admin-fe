@@ -7,7 +7,7 @@
           title="确定删除吗？"
           @confirm="handleDelete"
         >
-          <template #reference>
+       <template #reference>
             <el-button type="danger" size="small" icon="el-icon-delete">批量删除</el-button>
           </template>
         </el-popconfirm>

@@ -127,7 +127,7 @@ export default {
           }
 
           if (props.type == 'add') {
-            axios.post('/admin/upload/file', {
+            axios.post('/admin/carousel', {
            imgUrl: state.ruleForm.url,
               jumpUrl: state.ruleForm.link,
               showRank: state.ruleForm.sort
@@ -137,7 +137,7 @@ export default {
               if (props.reload) props.reload()
             })
           } else {
-            axios.put('/admin/upload/file', {
+            axios.put('/admin/carousel', {
               carouselId: state.id,
              imgUrl: state.ruleForm.url,
               jumpUrl: state.ruleForm.link,

@@ -7,77 +7,77 @@
           title="确定删除吗？"
           @confirm="handleDelete"
         >
-          <template #reference>
-            <el-button type="danger" size="small" icon="el-icon-delete">批量删除</el-button>
-          </template>
-        </el-popconfirm>
-      </div>
-    </template>
-    <el-table
-      v-loading="loading"
-      ref="multipleTable"
-      :data="tableData"
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
+     <template #reference>
+             <el-button type="danger" size="small" icon="el-icon-delete">批量删除</el-button>
+           </template>
+         </el-popconfirm>
+       </div>
+     </template>
+     <el-table
+       v-loading="loading"
+       ref="multipleTable"
+       :data="tableData"
+       tooltip-effect="dark"
+       style="width: 100%"
+       @selection-change="handleSelectionChange">
+       <el-table-column
+         type="selection"
+         width="55">
+       </el-table-column>
 
-<el-table-column
-   label="轮播图"
-   width="200">
-   <template #default="scope">
-     <img style="width: 200px;height: 200px" :src="scope.row.imgUrl" alt="轮播图">
-   </template>
-</el-table-column>
-<el-table-column
-    label="跳转链接"
-    >
+ <el-table-column
+    label="轮播图"
+    width="200">
     <template #default="scope">
-      <a target="_blank" :href="scope.row.redirectUrl">{{ scope.row.jumpUrl }}</a>
+      <img style="width: 200px;height: 200px" :src="scope.row.imgUrl" alt="轮播图">
     </template>
-  </el-table-column>
+ </el-table-column>
+ <el-table-column
+     label="跳转链接"
+     >
+     <template #default="scope">
+       <a target="_blank" :href="scope.row.redirectUrl">{{ scope.row.jumpUrl }}</a>
+     </template>
+   </el-table-column>
 
 
 
-      <el-table-column align="center"
-        prop="showRank"
-        label="排序值"
-        width="170"
-      >
-      </el-table-column>
-      <el-table-column align="center"
-          prop="isDeleted"
-          label="是否删除"
-          width="120"
-      >
-      </el-table-column>
-      <el-table-column align="center"
-        prop="createTime"
-        label="添加时间"
-        width="200"
-      >
-      </el-table-column>
-      <el-table-column align="center"
-        label="操作"
-        width="200"
-      >
-        <template #default="scope">
-          <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.carouselId)">修改</a>
-          <el-popconfirm
-            title="确定删除吗？"
-            @confirm="handleDeleteOne(scope.row.carouselId)"
-          >
-            <template #reference>
-              <a style="cursor: pointer">删除</a>
-            </template>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!--总数超过一页，再展示分页器-->
+       <el-table-column align="center"
+         prop="showRank"
+         label="排序值"
+         width="170"
+       >
+       </el-table-column>
+       <el-table-column align="center"
+           prop="isDeleted"
+           label="是否删除"
+           width="120"
+       >
+       </el-table-column>
+       <el-table-column align="center"
+         prop="createTime"
+         label="添加时间"
+         width="200"
+       >
+       </el-table-column>
+       <el-table-column align="center"
+         label="操作"
+         width="200"
+       >
+         <template #default="scope">
+           <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.carouselId)">修改</a>
+           <el-popconfirm
+             title="确定删除吗？"
+             @confirm="handleDeleteOne(scope.row.carouselId)"
+           >
+             <template #reference>
+               <a style="cursor: pointer">删除</a>
+             </template>
+           </el-popconfirm>
+         </template>
+       </el-table-column>
+     </el-table>
+     <!--总数超过一页，再展示分页器-->
     <el-pagination
       background
       layout="prev, pager, next"
