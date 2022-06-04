@@ -47,7 +47,7 @@
         width="220"
       >
         <template #default="scope">
-          <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.categoryId)">修改</a>
+          <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.categoryid)">修改</a>
           <a style="cursor: pointer; margin-right: 10px" @click="handleNext(scope.row)">下级分类</a>
           <el-popconfirm
             title="确定删除吗？"
@@ -70,7 +70,7 @@
       @current-change="changePage"
     />
   </el-card>
-  <DialogAddCategory ref='addGood' :reload="getCategory" :type="type" :level="level" :parent_id="parent_id" />
+  <DialogAddCategory ref='addGood' :reload="getCategory" :type="type" :level="level" :parentId="parentId" />
 </template>
 
 <script>
@@ -98,7 +98,7 @@ export default {
       pageSize: 10, // 分页大小
       type: 'add', // 操作类型
       level: 1,
-      parent_id: 0
+      parentId: 0
     })
     onMounted(() => {
       getCategory()
@@ -154,7 +154,7 @@ export default {
       }
       axios.delete('/admin/categories', {
         data: {
-          ids: state.multipleSelection.map(i => i.categoryId)
+          ids: state.multipleSelection.map(i => i.categoryid)
         }
       }).then(() => {
         ElMessage.success('删除成功')

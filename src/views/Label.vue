@@ -28,7 +28,7 @@
       <el-table-column align="center"
           prop="labelname"
           label="标签名称"
-          width="250"
+          width="200"
       >
       </el-table-column>
 <el-table-column align="center"
@@ -41,24 +41,19 @@
       <el-table-column align="center"
                        prop="createtime"
                        label="上传时间"
-                       width="200"
+                       width="280"
       >
       </el-table-column>
       <el-table-column align="center"
                        prop="isdeleted"
                        label="是否删除"
-                       width="100"
+                       width="180"
       >
       </el-table-column>
-      <el-table-column align="center"
-                       prop="updateTime"
-                       label="更新时间"
-                       width="200"
-      >
-      </el-table-column>
-      <el-table-column
+
+      <el-table-column  align="center"
           label="操作"
-          width="200"
+          width="270"
       >
         <template #default="scope">
           <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.labelid)">修改</a>
@@ -83,7 +78,7 @@
         @current-change="changePage"
     />
   </el-card>
- <!-- <DialogAddLabel ref='addGood' :reload="getLabels" :type="type" />-->
+<DialogAddLabel ref='addGood' :reload="getLabels" :type="type" />
 </template>
 
 <script>

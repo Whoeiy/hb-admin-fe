@@ -1,9 +1,9 @@
 <template>
   <el-dialog
-    :title="type == 'add' ? '添加分类' : '修改分类'"
-    v-model="visible"
-    width="400px"
-    @close="handleClose"
+      :title="type == 'add' ? '添加分类' : '修改分类'"
+      v-model="visible"
+      width="400px"
+      @close="handleClose"
   >
     <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="good-form">
       <el-form-item label="分类名称" prop="name">
@@ -11,6 +11,9 @@
       </el-form-item>
       <el-form-item label="排序值" prop="rank">
         <el-input type="number" max='200' v-model="ruleForm.rank"></el-input>
+      </el-form-item>
+      <el-form-item label="User" prop="createuser">
+        <el-input type="number" max='200' v-model="ruleForm.createuser"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -39,11 +42,12 @@ export default {
     const route = useRoute()
     const state = reactive({
       visible: false,
-      categorylevel: 1,
-      parentid: 0,
+      categoryLevel: 1,
+      parentId: 0,
       ruleForm: {
         name: '',
-        rank: ''
+        rank: '',
+        createuser: '',
       },
       rules: {
         name: [
@@ -51,18 +55,23 @@ export default {
         ],
         rank: [
           { required: 'true', message: '排序值不能为空', trigger: ['change'] }
+        ],
+        createuser: [
+          { required: 'true', message: '用户不能为空', trigger: ['change'] }
         ]
+
       },
       id: ''
     })
     // 获取详情
     const getDetail = (id) => {
-      axios.get(`/admin/categories/level/${id}`).then(res => {
+      axios.get(`/admin/categories/${id}`).then(res => {
         state.ruleForm = {
           name: res.categoryname,
-          rank: res.categoryrank
+          rank: res.categoryrank,
+          createuser: res.createuser
         }
-        state.parentId = res.parentId
+        state.parentid = res.parentid
         state.categorylevel = res.categorylevel
       })
     }
@@ -74,14 +83,14 @@ export default {
         getDetail(id)
       } else {
         // 新增类目，从路由获取父分类id 和 分类级别
-        const { level = 1, parent_id = 0 } = route.query
-        console.log(route.query)
+        const { level = 1, parentId = 0 } = route.query
         state.ruleForm = {
           name: '',
-          rank: ''
+          rank: '',
+          createuser: '',
         }
-        state.parentId = parentId
-        state.categorylevel = categorylevel
+        state.parentid = parentId
+        state.categorylevel = level
       }
     }
     // 关闭弹窗
@@ -108,10 +117,11 @@ export default {
           }
           if (props.type == 'add') {
             axios.post('/admin/categories', {
-              categoryLevel: state.categorylevel,
-              parentId: state.parentid,
-              categoryName: state.ruleForm.name,
-              categoryRank: state.ruleForm.rank
+              categorylevel: state.categorylevel,
+              parentid: state.parentid,
+              categoryname: state.ruleForm.name,
+              categoryrank: state.ruleForm.rank,
+              createuser: state.ruleForm.createuser
             }).then(() => {
               ElMessage.success('添加成功')
               state.visible = false
@@ -123,7 +133,8 @@ export default {
               categorylevel: state.categorylevel,
               parentid: state.parentid,
               categoryname: state.ruleForm.name,
-              categoryrank: state.ruleForm.rank
+              categoryrank: state.ruleForm.rank,
+              createuser: state.ruleForm.createuser
             }).then(() => {
               ElMessage.success('修改成功')
               state.visible = false

@@ -65,8 +65,8 @@ const router = createRouter({
       ]
     },
     {
-      path: '/Label',
-      name: 'Label',
+      path: '/label',
+      name: 'label',
       component: () => import(/* webpackChunkName: "label" */ '../views/Label.vue')
     },
 

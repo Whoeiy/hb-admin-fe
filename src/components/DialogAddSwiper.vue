@@ -6,7 +6,7 @@
     @close="handleClose"
   >
     <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="good-form">
-     <!-- <el-form-item label="图片" prop="url">
+    <el-form-item label="轮播图图片" prop="url">
         <el-upload
           class="avatar-uploader"
           :action="uploadImgServer"
@@ -21,10 +21,8 @@
           <img style="width: 200px; height: 100px; border: 1px solid #e9e9e9;" v-if="ruleForm.url" :src="ruleForm.url" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-      </el-form-item>-->
-      <el-form-item label="轮播图" prop="link">
-        <el-input type="text" v-model="ruleForm.link"></el-input>
       </el-form-item>
+
       <el-form-item label="跳转链接" prop="link">
         <el-input type="text" v-model="ruleForm.link"></el-input>
       </el-form-item>
@@ -65,8 +63,11 @@ export default {
         sort: ''
       },
       rules: {
-        link: [
+        url: [
           { required: 'true', message: '图片不能为空', trigger: ['change'] }
+        ],
+        link: [
+          { required: 'true', message: '跳转不能为空', trigger: ['change'] }
         ],
         sort: [
           { required: 'true', message: '排序不能为空', trigger: ['change'] }
@@ -121,13 +122,13 @@ export default {
       formRef.value.validate((valid) => {
         if (valid) {
           if (hasEmoji(state.ruleForm.link)) {
-            ElMessage.error('不要输入表情包，再输入就打死你个龟孙儿~')
+            ElMessage.error('不要输入表情包')
             return
           }
 
           if (props.type == 'add') {
-            axios.post('/admin/carousel', {
-           imgUrl: state.ruleForm.link,
+            axios.post('/admin/upload/file', {
+           imgUrl: state.ruleForm.url,
               jumpUrl: state.ruleForm.link,
               showRank: state.ruleForm.sort
             }).then(() => {
@@ -136,9 +137,9 @@ export default {
               if (props.reload) props.reload()
             })
           } else {
-            axios.put('/admin/carousel', {
+            axios.put('/admin/upload/file', {
               carouselId: state.id,
-             imgUrl: state.ruleForm.link,
+             imgUrl: state.ruleForm.url,
               jumpUrl: state.ruleForm.link,
               showRank: state.ruleForm.sort
             }).then(() => {

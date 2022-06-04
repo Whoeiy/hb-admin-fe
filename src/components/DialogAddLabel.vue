@@ -14,6 +14,9 @@
       <el-form-item label="排序值" prop="sort">
         <el-input type="number" v-model="ruleForm.sort"></el-input>
       </el-form-item>
+      <el-form-item label="User" prop="sort">
+        <el-input type="number" v-model="ruleForm.createuser"></el-input>
+      </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -45,7 +48,8 @@ export default {
       ruleForm: {
 
         name: '',
-        sort: ''
+        sort: '',
+        createuser:'',
       },
       rules: {
         name: [
@@ -53,17 +57,21 @@ export default {
         ],
         sort: [
           { required: 'true', message: '排序不能为空', trigger: ['change'] }
-        ]
-      },
+        ],
+
+          createuser: [
+            { required: 'true', message: '用户不能为空', trigger: ['change'] }
+          ]
+        },
       id: ''
     })
     // 获取详情
     const getDetail = (id) => {
       axios.get(`/admin/label/${id}`).then(res => {
         state.ruleForm = {
-
           name: res.labelname,
-          sort: res.labelrank
+          sort: res.labelrank,
+          createuser :res.createuser,
         }
       })
     }
@@ -79,7 +87,8 @@ export default {
         state.ruleForm = {
 
           name: '',
-          sort: ''
+          sort: '',
+          createuser:'',
         }
       }
     }
@@ -103,7 +112,9 @@ export default {
             axios.post('/admin/label', {
 
               labelname: state.ruleForm.name,
-              labelrank: state.ruleForm.sort
+              labelrank: state.ruleForm.sort,
+              createuser: state.ruleForm.createuser
+
             }).then(() => {
               ElMessage.success('添加成功')
               state.visible = false
@@ -111,8 +122,8 @@ export default {
             })
           } else {
             axios.put('/admin/label', {
-
-
+              labelid: state.id,
+              createuser: state.ruleForm.createuser,
               labelname: state.ruleForm.name,
               labelrank: state.ruleForm.sort
             }).then(() => {
@@ -124,13 +135,13 @@ export default {
         }
       })
     }
+
     return {
       ...toRefs(state),
       open,
       close,
       formRef,
-      handleBeforeUpload,
-      handleUrlSuccess,
+
       submitForm,
       handleClose
     }
