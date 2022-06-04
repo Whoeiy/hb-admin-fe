@@ -22,9 +22,9 @@ export function hasEmoji (str = '') {
 }
 
 // 单张图片上传
-export const uploadImgServer = 'http://101.133.131.175:8080/admin/upload/file'
+export const uploadImgServer = '/api/admin/upload/file'
 // 多张图片上传
-export const uploadImgsServer = 'http://101.133.131.175:8080/admin/upload/file'
+export const uploadImgsServer = '/api/admin/upload/files'
 
 export const pathMap = {
   login: '登录',
