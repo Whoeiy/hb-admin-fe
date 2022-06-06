@@ -110,7 +110,7 @@ export default {
     onMounted(() => {
       getVendorList()
     })
-    // 获取轮播图列表
+    // 获取商家列表
     const getVendorList = () => {
       state.loading = true
       axios.get('/admin/vendor', {
@@ -162,17 +162,25 @@ export default {
 
     const handleOption = () => {
       state.currentPage = 1
+      if(nameEn == undefined){
+        getVendorList()
+      }
       state.nameEn = nameEn
+      console.log('nameEn', state.nameEn)
       getVendorList()
     }
 
     const handleConfig = () => {
       console.log('nameEn', state.nameEn)
       //let params
-      axios.put(`/admin/vendor?pageNum=${state.pageNum}&pageSize=${state.pageSize}&keyword=${state.nameEn}`, {
+      axios.get(`/admin/vendor?pageNum=${state.currentPage}&pageSize=${state.pageSize}&keyword=${state.nameEn}`, {
         //ids: params
-      }).then(() => {
-        getVendorList()
+      }).then(res => {
+        state.tableData = res.list
+        state.total = res.totalCount
+        state.currentPage = res.currPage
+        state.loading = false
+        console.log(res)
       })
     }
 
