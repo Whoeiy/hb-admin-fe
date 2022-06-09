@@ -40,7 +40,9 @@
         prop="createtime"
         label="添加时间"
         width="200"
+        :formatter="dateFormat"
       >
+
       </el-table-column>
       <el-table-column
         label="操作"
@@ -79,10 +81,22 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import DialogAddCategory from '@/components/DialogAddCategory.vue'
 import axios from '@/utils/axios'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
 export default {
   name: 'Category',
   components: {
     DialogAddCategory
+  },
+  methods: {
+    //时间格式化
+    dateFormat:function(row, column) {
+      var date = row[column.property];
+      if (date == undefined) {
+        return "";
+      }
+      return moment(date).format("YYYY-MM-DD HH:mm:ss");
+    },
   },
   setup() {
     const multipleTable = ref(null)
@@ -177,7 +191,6 @@ export default {
       state.currentPage = val
       getCategory()
     }
-
     const handleNext = (item) => {
       const levelNumber = item.categorylevel + 1
       if (levelNumber == 4) {
@@ -203,10 +216,15 @@ export default {
       handleDeleteOne,
       getCategory,
       changePage,
-      handleNext
+      handleNext,
+
+
     }
   }
 }
+
+
+
 </script>
 
 <style scoped>

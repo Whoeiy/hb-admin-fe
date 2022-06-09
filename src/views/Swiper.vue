@@ -58,6 +58,7 @@
          prop="createTime"
          label="添加时间"
          width="200"
+         :formatter="dateFormat"
        >
        </el-table-column>
        <el-table-column align="center"
@@ -95,10 +96,22 @@ import { onMounted, reactive, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import DialogAddSwiper from '@/components/DialogAddSwiper.vue'
 import axios from '@/utils/axios'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
 export default {
   name: 'Swiper',
   components: {
     DialogAddSwiper
+  },
+  methods: {
+    //时间格式化
+    dateFormat:function(row, column) {
+      var date = row[column.property];
+      if (date == undefined) {
+        return "";
+      }
+      return moment(date).format("YYYY-MM-DD HH:mm:ss");
+    },
   },
   setup() {
     const multipleTable = ref(null)

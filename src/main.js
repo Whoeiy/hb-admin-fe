@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { ElButton, ElContainer, ElAside, ElHeader, ElMain, ElFooter, ElMenu, ElSubmenu, ElMenuItemGroup, ElMenuItem, ElForm, ElFormItem, ElInput, ElPopover, ElTag, ElCard, ElTable, ElTableColumn, ElPagination, ElDialog, ElPopconfirm, ElUpload, ElLoading, ElSelect, ElOption, ElRadioGroup, ElRadio, ElCascader, ElCheckbox, ElInputNumber } from 'element-plus'
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
+//import formatDate from './utils/formatDate';
 import App from './App.vue'
 import router from './router/index'
 
@@ -9,6 +10,7 @@ import router from './router/index'
 
 // 修改后的主题样式必须放在最后面
 import '../theme/index.css'
+
 
 const orderStatus = {
   0: '待支付',

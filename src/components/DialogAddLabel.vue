@@ -6,16 +6,14 @@
       @close="handleClose"
   >
     <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="good-form">
-
-      <el-form-item label="标签" prop="name">
+      <el-form-item label="标签名称" prop="name">
         <el-input type="text" v-model="ruleForm.name"></el-input>
       </el-form-item>
-
-      <el-form-item label="排序值" prop="sort">
-        <el-input type="number" v-model="ruleForm.sort"></el-input>
+      <el-form-item label="排序值" prop="rank">
+        <el-input type="number" max='200' v-model="ruleForm.rank"></el-input>
       </el-form-item>
-      <el-form-item label="User" prop="sort">
-        <el-input type="number" v-model="ruleForm.createuser"></el-input>
+      <el-form-item label="User" prop="createuser">
+        <el-input type="number" max='200' v-model="ruleForm.createuser"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -29,10 +27,10 @@
 
 <script>
 import { reactive, ref, toRefs } from 'vue'
+import { useRoute } from 'vue-router'
 import axios from '@/utils/axios'
-import { localGet, uploadImgServer, hasEmoji } from '@/utils'
+import { hasEmoji } from '@/utils/index'
 import { ElMessage } from 'element-plus'
-
 export default {
   name: 'DialogAddLabel',
   props: {
@@ -41,28 +39,28 @@ export default {
   },
   setup(props) {
     const formRef = ref(null)
+    const route = useRoute()
     const state = reactive({
-      uploadImgServer,
-      token: localGet('token') || '',
       visible: false,
+      labelLevel: 1,
+      parentId: 0,
       ruleForm: {
-
         name: '',
-        sort: '',
-        createuser:'',
+        rank: '',
+        createuser: '',
       },
       rules: {
         name: [
-          { required: 'true', message: '标签名不能为空', trigger: ['change'] }
+          { required: 'true', message: '名称不能为空', trigger: ['change'] }
         ],
-        sort: [
-          { required: 'true', message: '排序不能为空', trigger: ['change'] }
+        rank: [
+          { required: 'true', message: '排序值不能为空', trigger: ['change'] }
         ],
+        createuser: [
+          { required: 'true', message: '用户不能为空', trigger: ['change'] }
+        ]
 
-          createuser: [
-            { required: 'true', message: '用户不能为空', trigger: ['change'] }
-          ]
-        },
+      },
       id: ''
     })
     // 获取详情
@@ -70,13 +68,13 @@ export default {
       axios.get(`/admin/label/${id}`).then(res => {
         state.ruleForm = {
           name: res.labelname,
-          sort: res.labelrank,
-          createuser :res.createuser,
+          rank: res.labelrank,
+          createuser: res.createuser
         }
+        state.parentid = res.parentid
+        state.labalLevel = res.labelLevel
       })
     }
-
-
     // 开启弹窗
     const open = (id) => {
       state.visible = true
@@ -84,12 +82,15 @@ export default {
         state.id = id
         getDetail(id)
       } else {
+        // 新增类目，从路由获取父分类id 和 分类级别
+        const { labelLevel = 1, parentId = 0 } = route.query
         state.ruleForm = {
-
           name: '',
-          sort: '',
-          createuser:'',
+          rank: '',
+          createuser: '',
         }
+        state.parentid = parentId
+        state.LabelLevel = labelLevel
       }
     }
     // 关闭弹窗
@@ -100,21 +101,27 @@ export default {
       formRef.value.resetFields()
     }
     const submitForm = () => {
-      console.log(formRef.value.validate)
       formRef.value.validate((valid) => {
         if (valid) {
           if (hasEmoji(state.ruleForm.name)) {
             ElMessage.error('不要输入表情包')
             return
           }
-
+          if (state.ruleForm.name.length > 16) {
+            ElMessage.error('名称不能超过16个字符')
+            return
+          }
+          if (state.ruleForm.rank > 200) {
+            ElMessage.error('排序不能超过200')
+            return
+          }
           if (props.type == 'add') {
             axios.post('/admin/label', {
-
+             labelLevel: state.labeLevel,
+              parentid: state.parentid,
               labelname: state.ruleForm.name,
-              labelrank: state.ruleForm.sort,
+              labelrank: state.ruleForm.rank,
               createuser: state.ruleForm.createuser
-
             }).then(() => {
               ElMessage.success('添加成功')
               state.visible = false
@@ -123,9 +130,11 @@ export default {
           } else {
             axios.put('/admin/label', {
               labelid: state.id,
-              createuser: state.ruleForm.createuser,
+              labelLevel: state.labelLevel,
+              parentid: state.parentid,
               labelname: state.ruleForm.name,
-              labelrank: state.ruleForm.sort
+              labelrank: state.ruleForm.rank,
+              createuser: state.ruleForm.createuser
             }).then(() => {
               ElMessage.success('修改成功')
               state.visible = false
@@ -135,32 +144,14 @@ export default {
         }
       })
     }
-
     return {
       ...toRefs(state),
       open,
       close,
       formRef,
-
       submitForm,
       handleClose
     }
   }
 }
 </script>
-
-<style scoped>
-.avatar-uploader {
-  width: 100px;
-  height: 100px;
-  color: #ddd;
-  font-size: 30px;
-}
-.avatar-uploader-icon {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 1px solid #e9e9e9;
-  padding: 32px 17px;
-}
-</style>

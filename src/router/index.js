@@ -67,7 +67,19 @@ const router = createRouter({
     {
       path: '/label',
       name: 'label',
-      component: () => import(/* webpackChunkName: "label" */ '../views/Label.vue')
+      component: () => import(/* webpackChunkName: "label" */ '../views/Label.vue'),
+      children: [
+        {
+          path: '/label/labelLevel2',
+          name: 'labelLevel2',
+          component: () => import(/* webpackChunkName: "labellevel2" */ '../views/Label.vue'),
+        },
+        {
+          path: '/label/labelLevel3',
+          name: 'labelLevel3',
+          component: () => import(/* webpackChunkName: "labellevel3" */ '../views/Label.vue'),
+        }
+      ]
     },
 
     {
