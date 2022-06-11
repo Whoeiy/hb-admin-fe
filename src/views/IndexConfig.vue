@@ -4,8 +4,8 @@
       <div class="header">
         <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd">增加</el-button>
         <el-popconfirm
-          title="确定删除吗？"
-          @confirm="handleDelete"
+            title="确定删除吗？"
+            @confirm="handleDelete"
         >
           <template #reference>
             <el-button type="danger" size="small" icon="el-icon-delete">批量删除</el-button>
@@ -14,55 +14,55 @@
       </div>
     </template>
     <el-table
-      v-loading="loading"
-      ref="multipleTable"
-      :data="tableData"
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange">
+        v-loading="loading"
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange">
       <el-table-column
-        type="selection"
-        width="55">
+          type="selection"
+          width="55">
       </el-table-column>
       <el-table-column
-        prop="configName"
-        label="商品名称"
+          prop="configName"
+          label="商品名称"
       >
       </el-table-column>
       <el-table-column
-        label="跳转链接"
-        >
+          label="跳转链接"
+      >
         <template #default="scope">
           <a target="_blank" :href="scope.row.redirectUrl">{{ scope.row.redirectUrl }}</a>
         </template>
       </el-table-column>
       <el-table-column
-        prop="configRank"
-        label="排序值"
-        width="120"
+          prop="configRank"
+          label="排序值"
+          width="120"
       >
       </el-table-column>
       <el-table-column
-        prop="goodsId"
-        label="商品编号"
-        width="200"
+          prop="giftId"
+          label="商品编号"
+          width="200"
       >
       </el-table-column>
       <el-table-column
-        prop="createTime"
-        label="添加时间"
-        width="200"
+          prop="createTime"
+          label="添加时间"
+          width="200"
       >
       </el-table-column>
       <el-table-column
-        label="操作"
-        width="100"
+          label="操作"
+          width="100"
       >
         <template #default="scope">
           <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.configId)">修改</a>
           <el-popconfirm
-            title="确定删除吗？"
-            @confirm="handleDeleteOne(scope.row.configId)"
+              title="确定删除吗？"
+              @confirm="handleDeleteOne(scope.row.configId)"
           >
             <template #reference>
               <a style="cursor: pointer">删除</a>
@@ -73,12 +73,12 @@
     </el-table>
     <!--总数超过一页，再展示分页器-->
     <el-pagination
-      background
-      layout="prev, pager, next"
-      :total="total"
-      :page-size="pageSize"
-      :current-page="currentPage"
-      @current-change="changePage"
+        background
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="pageSize"
+        :current-page="currentPage"
+        @current-change="changePage"
     />
   </el-card>
   <DialogAddGood ref='addGood' :reload="getIndexConfig" :type="type" :configType="configType" />
@@ -92,9 +92,9 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from '@/utils/axios'
 // 首页配置类型参数
 const configTypeMap = {
-  hot: 3,
-  new: 4,
-  recommend: 5
+  hot: 1,
+  new: 2,
+  recommend: 3
 }
 export default {
   name: 'Hot',
@@ -114,7 +114,8 @@ export default {
       currentPage: 1, // 当前页
       pageSize: 10, // 分页大小
       type: 'add', // 操作类型
-      configType: 3 // 3-(首页)热销商品 4-(首页)新品上线 5-(首页)为你推荐
+      configType: 3, // 3-(首页)热销商品 4-(首页)新品上线 5-(首页)为你推荐
+
     })
     // 监听路由变化
     const unwatch = router.beforeEach((to) => {
@@ -135,16 +136,17 @@ export default {
     // 首页热销商品列表
     const getIndexConfig = () => {
       state.loading = true
-      axios.get('/indexConfigs', {
+      axios.get('/admin/indexConfig', {
         params: {
-          pageNumber: state.currentPage,
+          pageNum: state.currentPage,
           pageSize: state.pageSize,
-          configType: state.configType
+          configType: state.configType,
+
         }
-      }).then(res => {
+      }).then(res => { console.log(res)
         state.tableData = res.list
-        state.total = res.totalCount
-        state.currentPage = res.currPage
+     state.total = res.totalCount
+   state.currentPage = res.currPage
         state.loading = false
       })
     }
@@ -168,7 +170,7 @@ export default {
         ElMessage.error('请选择项')
         return
       }
-      axios.delete('/indexConfigs', {
+      axios.delete('/admin/indexConfig', {
         data: {
           ids: state.multipleSelection.map(i => i.configId)
         }
@@ -179,7 +181,7 @@ export default {
     }
     // 单个删除
     const handleDeleteOne = (id) => {
-      axios.delete('/indexConfigs', {
+      axios.delete(`/admin/indexConfig/${id}`, {
         data: {
           ids: [id]
         }
@@ -188,6 +190,7 @@ export default {
         getIndexConfig()
       })
     }
+
     const changePage = (val) => {
       state.currentPage = val
       getIndexConfig()
@@ -209,10 +212,10 @@ export default {
 </script>
 
 <style scoped>
-  .index-container {
-    min-height: 100%;
-  }
-  .el-card.is-always-shadow {
-    min-height: 100%!important;
-  }
+.index-container {
+  min-height: 100%;
+}
+.el-card.is-always-shadow {
+  min-height: 100%!important;
+}
 </style>

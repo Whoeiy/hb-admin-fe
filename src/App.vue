@@ -4,8 +4,8 @@
       <el-aside class="aside">
         <div class="head">
           <div>
-            <img src="https://s.weituibao.com/1582958061265/mlogo.png" alt="logo">
-            <span>vue3 admin</span>
+            <img src="src/assets/365logo.png" alt="logo" style="width: 30px; height: 30px">
+            <span style="font-size: 17px">HeartBeat365</span>
           </div>
         </div>
         <div class="line" />
@@ -23,7 +23,7 @@
             <el-menu-item-group>
               <el-menu-item index="/introduce"><i class="el-icon-data-line" />系统介绍</el-menu-item>
               <el-menu-item index="/dashboard"><i class="el-icon-odometer" />Dashboard</el-menu-item>
-              <el-menu-item index="/add"><i class="el-icon-plus" />添加商品</el-menu-item>
+         <!--     <el-menu-item index="/add"><i class="el-icon-plus" />添加商品</el-menu-item>-->
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="2">
@@ -45,8 +45,7 @@
               <el-menu-item index="/category"><i class="el-icon-menu" />分类管理</el-menu-item>
               <el-menu-item index="/Label"><i class="el-icon-menu" />标签管理</el-menu-item>
               <el-menu-item index="/good"><i class="el-icon-s-goods" />商品管理</el-menu-item>
-              <el-menu-item index="/guest"><i class="el-icon-user-solid" />会员管理</el-menu-item>
-              <el-menu-item index="/order"><i class="el-icon-s-order" />订单管理</el-menu-item>
+                <el-menu-item index="/order"><i class="el-icon-s-order" />订单管理</el-menu-item>
               <el-menu-item index="/vendor"><i class="el-icon-s-order" />商家管理</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
