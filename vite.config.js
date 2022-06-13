@@ -38,7 +38,8 @@ export default ({ mode }) =>  defineConfig({
         // yy: 本地接口
         // target: 'http://localhost:8080/',
         // yy: aliyun服务器接口
-        target: 'http://101.133.131.175:8080/',
+        // target: 'http://101.133.131.175:8080/',
+        target: 'http://101.133.131.175:8081/ms',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')
       }
