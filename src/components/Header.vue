@@ -49,7 +49,7 @@ export default {
       }
     })
     const getUserInfo = async () => {
-      const userInfo = await axios.get('/adminUser/profile')
+      const userInfo = await axios.get('/admin/profile')
       state.userInfo = userInfo
     }
     const logout = () => {
