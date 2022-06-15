@@ -19,8 +19,8 @@
           </div>
         </template>
         <div class="nickname">
-          <p>登录名：{{ userInfo && userInfo.loginUserName || '' }}</p>
-          <p>昵称：{{ userInfo && userInfo.nickName || '' }}</p>
+          <p>登录名：{{ userInfo && userInfo.name || '' }}</p>
+          <p>昵称：{{ userInfo && userInfo.name || '' }}</p>
           <el-tag size="small" effect="dark" class="logout" @click="logout">退出</el-tag>
         </div>
       </el-popover>
@@ -53,7 +53,7 @@ export default {
       state.userInfo = userInfo
     }
     const logout = () => {
-      axios.delete('/logout').then(() => {
+      axios.delete('/admin/logout').then(() => {
         localRemove('token')
         window.location.reload()
       })
