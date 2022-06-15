@@ -80,14 +80,14 @@ export default {
         getDetail(id)
       } else {
         // 新增类目，从路由获取父分类id 和 分类级别
-        const { labelLevel = 1, parentId = 0 } = route.query
+        const { labelLevel = 1, parentId = 0, createuser = 1 } = route.query
         state.ruleForm = {
           name: '',
           rank: '',
 
         }
         state.parentid = parentId
-        state.Labellevel = labelLevel
+        state.labelLevel = labelLevel
         state.createuser = createuser
       }
     }
@@ -115,7 +115,7 @@ export default {
           }
           if (props.type == 'add') {
             axios.post('/admin/label', {
-             labellevel: state.labelevel,
+              labellevel: state.labelLevel,
               parentid: state.parentid,
               labelname: state.ruleForm.name,
               labelrank: state.ruleForm.rank,
@@ -128,7 +128,7 @@ export default {
           } else {
             axios.put('/admin/label', {
               labelid: state.id,
-              labellevel: state.labellevel,
+              labellevel: state.labelLevel,
               parentid: state.parentid,
               labelname: state.ruleForm.name,
               labelrank: state.ruleForm.rank,

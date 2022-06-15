@@ -123,7 +123,7 @@ export default {
     // 获取分类列表
     const getLabels = () => {
       const { labelLevel = 1, parentId = 0 } = route.query
-    console.log(route.query)
+      console.log(route.query)
       state.loading = true
       axios.get(`/admin/label/labelLevel`, {
         params: {
@@ -131,7 +131,6 @@ export default {
           pageSize: state.pageSize,
           labelLevel:  labelLevel,
           parentId: parentId,
-
         }
       }).then(res => { console.log(res)
         state.tableData = res.list
@@ -182,7 +181,7 @@ export default {
       router.push({
         name: `labelLevel${levelNumber}`,
         query: {
-          labellevel: levelNumber,
+          labelLevel: levelNumber,
           parentId: item.labelid
         }
       })
