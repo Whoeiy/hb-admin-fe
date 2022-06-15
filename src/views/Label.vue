@@ -43,7 +43,7 @@
       >
         <template #default="scope">
           <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.labelid)">修改</a>
-          <a style="cursor: pointer; margin-right: 10px" @click="handleNext(scope.row)">下级分类</a>
+          <a style="cursor: pointer; margin-right: 10px" @click="handleNext(scope.row)">下级标签</a>
           <el-popconfirm
               title="确定删除吗？"
               @confirm="handleDeleteOne(scope.row.labelid)"
@@ -129,7 +129,7 @@ export default {
         params: {
           currentPage: state.currentPage,
           pageSize: state.pageSize,
-          labelLevel:  state.labelLevel,
+          labelLevel:  labelLevel,
           parentId: parentId,
 
         }
@@ -173,10 +173,7 @@ export default {
       state.currentPage = val
       getLabels()
     }
-
-
     const handleNext = (item) => {
-
       const levelNumber = item.labellevel + 1
       if (levelNumber == 4) {
         ElMessage.error('没有下一级')

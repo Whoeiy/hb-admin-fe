@@ -12,9 +12,7 @@
       <el-form-item label="排序值" prop="rank">
         <el-input type="number" max='200' v-model="ruleForm.rank"></el-input>
       </el-form-item>
-      <el-form-item label="User" prop="createuser">
-        <el-input type="number" max='200' v-model="ruleForm.createuser"></el-input>
-      </el-form-item>
+
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -44,10 +42,11 @@ export default {
       visible: false,
       labelLevel: 1,
       parentId: 0,
+      createuser:1,
       ruleForm: {
         name: '',
         rank: '',
-        createuser: '',
+
       },
       rules: {
         name: [
@@ -55,9 +54,6 @@ export default {
         ],
         rank: [
           { required: 'true', message: '排序值不能为空', trigger: ['change'] }
-        ],
-        createuser: [
-          { required: 'true', message: '用户不能为空', trigger: ['change'] }
         ]
 
       },
@@ -69,10 +65,11 @@ export default {
         state.ruleForm = {
           name: res.labelname,
           rank: res.labelrank,
-          createuser: res.createuser
+
         }
         state.parentid = res.parentid
-        state.labalLevel = res.labelLevel
+        state.laballevel = res.labellevel
+        state.createuser = res.createuser
       })
     }
     // 开启弹窗
@@ -87,10 +84,11 @@ export default {
         state.ruleForm = {
           name: '',
           rank: '',
-          createuser: '',
+
         }
         state.parentid = parentId
-        state.LabelLevel = labelLevel
+        state.Labellevel = labelLevel
+        state.createuser = createuser
       }
     }
     // 关闭弹窗
@@ -117,11 +115,11 @@ export default {
           }
           if (props.type == 'add') {
             axios.post('/admin/label', {
-             labelLevel: state.labeLevel,
+             labellevel: state.labelevel,
               parentid: state.parentid,
               labelname: state.ruleForm.name,
               labelrank: state.ruleForm.rank,
-              createuser: state.ruleForm.createuser
+              createuser: state.createuser
             }).then(() => {
               ElMessage.success('添加成功')
               state.visible = false
@@ -130,11 +128,11 @@ export default {
           } else {
             axios.put('/admin/label', {
               labelid: state.id,
-              labelLevel: state.labelLevel,
+              labellevel: state.labellevel,
               parentid: state.parentid,
               labelname: state.ruleForm.name,
               labelrank: state.ruleForm.rank,
-              createuser: state.ruleForm.createuser
+              createuser: state.createuser
             }).then(() => {
               ElMessage.success('修改成功')
               state.visible = false

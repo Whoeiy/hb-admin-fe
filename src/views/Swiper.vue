@@ -146,15 +146,7 @@ export default {
     const handleEdit = (id) => {
       state.type = 'edit'
       addGood.value.open(id)
-
-      axios.put(`/admin/carousel`, {
-        data: {
-          ids: [id]
-        }
-      }).then(() => {
-        ElMessage.success('删除成功')
-        getCarousels()
-      })
+      
     }
     // 选择项
     const handleSelectionChange = (val) => {

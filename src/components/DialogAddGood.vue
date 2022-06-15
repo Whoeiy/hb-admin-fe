@@ -21,9 +21,7 @@
       <el-form-item label="类型" prop="ctype">
         <el-input type="number" v-model="ruleForm.ctype"></el-input>
       </el-form-item>
-      <el-form-item label="user" prop="user">
-        <el-input type="number" v-model="ruleForm.user"></el-input>
-      </el-form-item>
+
 
     </el-form>
     <template #footer>
@@ -51,13 +49,14 @@ export default {
     const formRef = ref(null)
     const state = reactive({
       visible: false,
+      createUser:1,
       ruleForm: {
         name: '',
         link: '',
         id: '',
         sort: '',
         ctype:'',
-        user:'',
+
       },
       rules: {
         name: [
@@ -75,9 +74,7 @@ export default {
         ctype: [
           { required: 'true', message: 'type不能为空', trigger: ['change'] }
         ],
-        user: [
-          { required: 'true', message: 'user不能为空', trigger: ['change'] }
-        ]
+
       },
       id: ''
     })
@@ -90,8 +87,9 @@ export default {
           link: res.redirectUrl,
           sort: res.configRank,
           ctype: res.configType,
-          user: res.createUser
+
         }
+        state.createUser = res.createUser
       })
     }
     // 开启弹窗
@@ -107,8 +105,9 @@ export default {
           link: '',
           sort: '',
           ctype:'',
-          user:'',
+
         }
+        state.createUser = createUser
       }
     }
     // 关闭弹窗
@@ -142,7 +141,7 @@ export default {
               giftId: state.ruleForm.id,
               configRank: state.ruleForm.sort,
               configType: state.ruleForm.ctype,
-              createUser:state.ruleForm.user
+              createUser:state.createUser
 
             }).then(() => {
               ElMessage.success('添加成功')
@@ -157,7 +156,7 @@ export default {
               redirectUrl: state.ruleForm.link,
               giftId: state.ruleForm.id,
               configRank: state.ruleForm.sort,
-              createUser:state.ruleForm.user,
+              createUser:state.createUser,
               configType: state.ruleForm.ctype,
             }).then(() => {
               ElMessage.success('修改成功')

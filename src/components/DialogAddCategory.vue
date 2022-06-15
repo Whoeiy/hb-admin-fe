@@ -12,9 +12,6 @@
       <el-form-item label="排序值" prop="rank">
         <el-input type="number" max='200' v-model="ruleForm.rank"></el-input>
       </el-form-item>
-      <el-form-item label="User" prop="createuser">
-        <el-input type="number" max='200' v-model="ruleForm.createuser"></el-input>
-      </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -44,10 +41,11 @@ export default {
       visible: false,
       categoryLevel: 1,
       parentId: 0,
+      createuser:1,
+
       ruleForm: {
         name: '',
         rank: '',
-        createuser: '',
       },
       rules: {
         name: [
@@ -55,9 +53,6 @@ export default {
         ],
         rank: [
           { required: 'true', message: '排序值不能为空', trigger: ['change'] }
-        ],
-        createuser: [
-          { required: 'true', message: '用户不能为空', trigger: ['change'] }
         ]
 
       },
@@ -69,10 +64,11 @@ export default {
         state.ruleForm = {
           name: res.categoryname,
           rank: res.categoryrank,
-          createuser: res.createuser
         }
+
         state.parentid = res.parentid
         state.categorylevel = res.categorylevel
+        state.createuser = res.createuser
       })
     }
     // 开启弹窗
@@ -87,10 +83,11 @@ export default {
         state.ruleForm = {
           name: '',
           rank: '',
-          createuser: '',
+
         }
         state.parentid = parentId
         state.categorylevel = level
+        state.createuser = createuser
       }
     }
     // 关闭弹窗
@@ -119,9 +116,10 @@ export default {
             axios.post('/admin/categories', {
               categorylevel: state.categorylevel,
               parentid: state.parentid,
+              createuser : state.createuser,
               categoryname: state.ruleForm.name,
               categoryrank: state.ruleForm.rank,
-              createuser: state.ruleForm.createuser
+
             }).then(() => {
               ElMessage.success('添加成功')
               state.visible = false
@@ -132,9 +130,10 @@ export default {
               categoryid: state.id,
               categorylevel: state.categorylevel,
               parentid: state.parentid,
+              createuser : state.createuser,
               categoryname: state.ruleForm.name,
               categoryrank: state.ruleForm.rank,
-              createuser: state.ruleForm.createuser
+
             }).then(() => {
               ElMessage.success('修改成功')
               state.visible = false

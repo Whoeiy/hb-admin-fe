@@ -79,9 +79,9 @@ export default {
     const getDetail = (id) => {
       axios.get(`/admin/carousel/${id}`).then(res => {
         state.ruleForm = {
-          url: res.carouselUrl,
-          link: res.redirectUrl,
-          sort: res.carouselRank
+          url: res.imgUrl,
+          link: res.jumpUrl,
+          sort: res.showRank
         }
       })
     }

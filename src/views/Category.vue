@@ -68,6 +68,7 @@
   <DialogAddCategory ref='addGood' :reload="getCategory" :type="type" :level="level" :parentId="parentId" />
 </template>
 
+
 <script>
 import { onMounted, onUnmounted, reactive, ref, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -153,7 +154,7 @@ export default {
     const handleSelectionChange = (val) => {
       state.multipleSelection = val
     }
-    
+
     // 单个删除
 
     const handleDeleteOne = (id) => {
