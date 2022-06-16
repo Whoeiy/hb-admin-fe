@@ -5,16 +5,16 @@
         <el-form-item required label="礼物分类">
           <el-cascader :placeholder="defaultCate" style="width: 300px" :props="category" @change="handleChangeCate"></el-cascader>
         </el-form-item>
-        <el-form-item label="礼物名称" prop="goodsName">
+        <el-form-item label="礼物名称" prop="giftName">
           <el-input style="width: 300px" v-model="goodForm.goodsName" placeholder="请输入商品名称"></el-input>
         </el-form-item>
-        <el-form-item label="礼物简介" prop="goodsIntro">
+        <el-form-item label="礼物简介" prop="giftIntro">
           <el-input style="width: 300px" type="textarea" v-model="goodForm.goodsIntro" placeholder="请输入商品简介(100字)"></el-input>
         </el-form-item>
         <el-form-item label="礼物价格" prop="originalPrice">
           <el-input type="number" min="0" style="width: 300px" v-model="goodForm.originalPrice" placeholder="请输入商品价格"></el-input>
         </el-form-item>
-        <el-form-item label="礼物会员价" prop="sellingPrice">
+        <el-form-item label="礼物会员价" prop="vipPrice">
           <el-input type="number" min="0" style="width: 300px" v-model="goodForm.sellingPrice" placeholder="请输入商品售价"></el-input>
         </el-form-item>
         <el-form-item label="礼物库存" prop="stockNum">
@@ -23,7 +23,7 @@
         <el-form-item label="礼物标签" prop="tag">
           <el-input style="width: 300px" v-model="goodForm.tag" placeholder="请输入礼物小标签"></el-input>
         </el-form-item>
-        <el-form-item label="上架状态" prop="goodsSellStatus">
+        <el-form-item label="上架状态" prop="isShown">
           <el-radio-group v-model="goodForm.goodsSellStatus">
             <el-radio label="0">上架</el-radio>
             <el-radio label="1">下架</el-radio>
@@ -79,26 +79,26 @@ export default {
       id: id,
       defaultCate: '',
       goodForm: {
-        goodsName: '',
-        goodsIntro: '',
+        giftName: '',
+        giftIntro: '',
         originalPrice: '',
-        sellingPrice: '',
+        vipPrice: '',
         stockNum: '',
-        goodsSellStatus: '0',
-        goodsCoverImg: '',
+        isShown: '0',
+        imgUrl: '',
         tag: ''
       },
       rules: {
-        goodsCoverImg: [
+        imgUrl: [
           { required: 'true', message: '请上传主图', trigger: ['change'] }
         ],
-        goodsName: [
+        giftName: [
           { required: 'true', message: '请填写礼物名称', trigger: ['change'] }
         ],
         originalPrice: [
           { required: 'true', message: '请填写礼物价格', trigger: ['change'] }
         ],
-        sellingPrice: [
+        vipPrice: [
           { required: 'true', message: '请填写礼物售价', trigger: ['change'] }
         ],
         stockNum: [
