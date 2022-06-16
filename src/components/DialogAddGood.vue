@@ -1,25 +1,22 @@
 <template>
   <el-dialog
-      :title="type == 'add' ? '添加商品' : '修改商品'"
+      :title="type == 'add' ? '添加礼物' : '修改礼物'"
       v-model="visible"
       width="400px"
       @close="handleClose"
   >
     <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="good-form">
-      <el-form-item label="商品名称" prop="name">
+      <el-form-item label="礼物名称" prop="name">
         <el-input type="text" v-model="ruleForm.name"></el-input>
       </el-form-item>
       <el-form-item label="跳转链接" prop="link">
         <el-input type="text" v-model="ruleForm.link"></el-input>
       </el-form-item>
-      <el-form-item label="商品编号" prop="id">
+      <el-form-item label="礼物编号" prop="id">
         <el-input type="number" min="0" v-model="ruleForm.id"></el-input>
       </el-form-item>
       <el-form-item label="排序值" prop="sort">
         <el-input type="number" v-model="ruleForm.sort"></el-input>
-      </el-form-item>
-      <el-form-item label="类型" prop="ctype">
-        <el-input type="number" v-model="ruleForm.ctype"></el-input>
       </el-form-item>
 
 
@@ -42,21 +39,20 @@ export default {
   name: 'DialogAddHotGood',
   props: {
     type: String,
-   // configType: Number,
+    configType: Number,
     reload: Function
   },
   setup(props) {
     const formRef = ref(null)
     const state = reactive({
       visible: false,
-      createUser:1,
+      createUser: 1,
+      configType: '',
       ruleForm: {
         name: '',
         link: '',
         id: '',
         sort: '',
-        ctype:'',
-
       },
       rules: {
         name: [
@@ -71,10 +67,6 @@ export default {
         sort: [
           { required: 'true', message: '排序不能为空', trigger: ['change'] }
         ],
-        ctype: [
-          { required: 'true', message: 'type不能为空', trigger: ['change'] }
-        ],
-
       },
       id: ''
     })
@@ -86,28 +78,25 @@ export default {
           id: res.giftId,
           link: res.redirectUrl,
           sort: res.configRank,
-          ctype: res.configType,
-
         }
+        state.configType = res.configType,
         state.createUser = res.createUser
       })
     }
     // 开启弹窗
     const open = (id) => {
       state.visible = true
-      if (id) {
+      if (id) { // 更新
         state.id = id
         getDetail(id)
-      } else {
+      } else { // 修改
         state.ruleForm = {
           name: '',
           id: '',
           link: '',
           sort: '',
-          ctype:'',
-
         }
-        state.createUser = createUser
+        state.createUser = 1
       }
     }
     // 关闭弹窗
@@ -126,7 +115,7 @@ export default {
             return
           }
           if (state.ruleForm.name.length > 128) {
-            ElMessage.error('商品名称不能超过128个字符')
+            ElMessage.error('礼物名称不能超过128个字符')
             return
           }
           if (state.ruleForm.sort < 0 || state.ruleForm.sort > 200) {
@@ -135,13 +124,13 @@ export default {
           }
           if (props.type == 'add') {
             axios.post('/admin/indexConfig', {
-           //  configType: props.configType || 1,
+              configType: props.configType || 1,
               configName: state.ruleForm.name,
               redirectUrl: state.ruleForm.link,
               giftId: state.ruleForm.id,
               configRank: state.ruleForm.sort,
-              configType: state.ruleForm.ctype,
-              createUser:state.createUser
+              // configType: props.configType || 1,
+              createUser: state.createUser
 
             }).then(() => {
               ElMessage.success('添加成功')
@@ -151,13 +140,13 @@ export default {
           } else {
             axios.put('/admin/indexConfig', {
               configId: state.id,
-          //  configType: props.configType || 1,
+              configType: props.configType || 1,
               configName: state.ruleForm.name,
               redirectUrl: state.ruleForm.link,
               giftId: state.ruleForm.id,
               configRank: state.ruleForm.sort,
-              createUser:state.createUser,
-              configType: state.ruleForm.ctype,
+              createUser: state.createUser,
+              // configType: state.configType,
             }).then(() => {
               ElMessage.success('修改成功')
               state.visible = false
