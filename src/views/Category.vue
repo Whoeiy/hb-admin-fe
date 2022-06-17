@@ -24,6 +24,13 @@
       >
       </el-table-column>
       <el-table-column
+          label="分类图"
+          width="200">
+        <template #default="scope">
+          <img style="width: 200px;height: 200px" :src="scope.row.categoryicon" alt="分类图">
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="categoryrank"
         label="排序值"
         width="120"

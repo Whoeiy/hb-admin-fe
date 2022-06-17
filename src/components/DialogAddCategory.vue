@@ -9,6 +9,22 @@
       <el-form-item label="分类名称" prop="name">
         <el-input type="text" v-model="ruleForm.name"></el-input>
       </el-form-item>
+      <el-form-item label="分类图片" prop="url">
+        <el-upload
+            class="avatar-uploader"
+            :action="uploadImgServer"
+            accept="jpg,jpeg,png"
+            :headers="{
+            token: token
+          }"
+            :show-file-list="false"
+            :before-upload="handleBeforeUpload"
+            :on-success="handleUrlSuccess"
+        >
+          <img style="width: 200px; height: 100px; border: 1px solid #e9e9e9;" v-if="ruleForm.url" :src="ruleForm.url" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
       <el-form-item label="排序值" prop="rank">
         <el-input type="number" max='200' v-model="ruleForm.rank"></el-input>
       </el-form-item>
@@ -26,7 +42,8 @@
 import { reactive, ref, toRefs } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from '@/utils/axios'
-import { hasEmoji } from '@/utils/index'
+
+import { localGet, uploadImgServer, hasEmoji } from '@/utils'
 import { ElMessage } from 'element-plus'
 export default {
   name: 'DialogAddCategory',
@@ -38,6 +55,8 @@ export default {
     const formRef = ref(null)
     const route = useRoute()
     const state = reactive({
+uploadImgServer,
+ token: localGet('token') || '',
       visible: false,
       categoryLevel: 1,
       parentId: 0,
@@ -46,10 +65,14 @@ export default {
       ruleForm: {
         name: '',
         rank: '',
+        url: '',
       },
       rules: {
         name: [
           { required: 'true', message: '名称不能为空', trigger: ['change'] }
+        ],
+        url: [
+          {  trigger: ['change'] }
         ],
         rank: [
           { required: 'true', message: '排序值不能为空', trigger: ['change'] }
@@ -63,6 +86,7 @@ export default {
       axios.get(`/admin/categories/${id}`).then(res => {
         state.ruleForm = {
           name: res.categoryname,
+          url: res.categoryicon,
           rank: res.categoryrank,
         }
 
@@ -83,6 +107,7 @@ export default {
         state.ruleForm = {
           name: '',
           rank: '',
+          url: '',
 
         }
         state.parentid = parentId
@@ -96,6 +121,17 @@ export default {
     }
     const handleClose = () => {
       formRef.value.resetFields()
+    }
+    const handleBeforeUpload = (file) => {
+      const sufix = file.name.split('.')[1] || ''
+      if (!['jpg', 'jpeg', 'png'].includes(sufix)) {
+        ElMessage.error('请上传 jpg、jpeg、png 格式的图片')
+        return false
+      }
+    }
+    // 上传图片
+    const handleUrlSuccess = (val) => {
+      state.ruleForm.url = val.data || ''
     }
     const submitForm = () => {
       formRef.value.validate((valid) => {
@@ -119,6 +155,7 @@ export default {
               createuser : state.createuser,
               categoryname: state.ruleForm.name,
               categoryrank: state.ruleForm.rank,
+              categoryicon: state.ruleForm.url
 
             }).then(() => {
               ElMessage.success('添加成功')
@@ -133,6 +170,7 @@ export default {
               createuser : state.createuser,
               categoryname: state.ruleForm.name,
               categoryrank: state.ruleForm.rank,
+              categoryicon: state.ruleForm.url
 
             }).then(() => {
               ElMessage.success('修改成功')
@@ -149,7 +187,10 @@ export default {
       close,
       formRef,
       submitForm,
-      handleClose
+      handleClose,
+      handleBeforeUpload,
+      handleUrlSuccess,
+
     }
   }
 }

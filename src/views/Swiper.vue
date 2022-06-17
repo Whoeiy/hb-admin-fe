@@ -146,7 +146,7 @@ export default {
     const handleEdit = (id) => {
       state.type = 'edit'
       addGood.value.open(id)
-      
+
     }
     // 选择项
     const handleSelectionChange = (val) => {
