@@ -66,7 +66,7 @@ export default {
       const { id } = to.query
       state.name = pathMap[to.name]
       if (id && to.name == 'add') {
-        state.name = '编辑商品'
+        state.name = '编辑礼物'
       }
       if (id && to.name == 'addVendor') {
         state.name = '编辑商家'
