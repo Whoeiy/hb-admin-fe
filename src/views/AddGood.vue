@@ -1,35 +1,38 @@
 <template>
   <div class="add">
     <el-card class="add-container">
-      <el-form :model="goodForm" :rules="rules" ref="goodRef" label-width="100px" class="goodForm">
+      <el-form :model="giftForm" :rules="rules" ref="giftRef" label-width="100px" class="giftForm">
         <el-form-item required label="礼物分类">
-          <el-cascader :placeholder="defaultCate" style="width: 300px" :props="category" @change="handleChangeCate"></el-cascader>
+          <el-cascader :placeholder="defaultCate" style="width: 300px;" :props="category" @change="handleChangeCate"></el-cascader>
         </el-form-item>
         <el-form-item label="礼物名称" prop="giftName">
-          <el-input style="width: 300px" v-model="goodForm.goodsName" placeholder="请输入商品名称"></el-input>
+          <el-input style="width: 300px" v-model="giftForm.giftName" placeholder="请输入礼物名称"></el-input>
         </el-form-item>
         <el-form-item label="礼物简介" prop="giftIntro">
-          <el-input style="width: 300px" type="textarea" v-model="goodForm.goodsIntro" placeholder="请输入商品简介(100字)"></el-input>
+          <el-input style="width: 300px" type="textarea" v-model="giftForm.giftIntro" placeholder="请输入礼物简介(100字)"></el-input>
         </el-form-item>
         <el-form-item label="礼物价格" prop="originalPrice">
-          <el-input type="number" min="0" style="width: 300px" v-model="goodForm.originalPrice" placeholder="请输入商品价格"></el-input>
+          <el-input type="number" min="0" style="width: 300px" v-model="giftForm.originalPrice" placeholder="请输入礼物价格"></el-input>
         </el-form-item>
         <el-form-item label="礼物会员价" prop="vipPrice">
-          <el-input type="number" min="0" style="width: 300px" v-model="goodForm.sellingPrice" placeholder="请输入商品售价"></el-input>
+          <el-input type="number" min="0" style="width: 300px" v-model="giftForm.vipPrice" placeholder="请输入礼物售价"></el-input>
         </el-form-item>
         <el-form-item label="礼物库存" prop="stockNum">
-          <el-input type="number" min="0" style="width: 300px" v-model="goodForm.stockNum" placeholder="请输入商品库存"></el-input>
+          <el-input type="number" min="0" style="width: 300px" v-model="giftForm.stockNum" placeholder="请输入礼物库存"></el-input>
         </el-form-item>
-        <el-form-item label="礼物标签" prop="tag">
-          <el-input style="width: 300px" v-model="goodForm.tag" placeholder="请输入礼物小标签"></el-input>
+        <!-- <el-form-item label="礼物标签" prop="giftLabelIdList">
+          <el-input style="width: 300px" v-model="giftForm.giftLabelIdList" placeholder="请输入礼物小标签"></el-input>
+        </el-form-item> -->
+        <el-form-item required label="礼物标签">
+          <el-cascader :placeholder="defaultLabel" style="width: 300px;" :props="label" @change="handleChangeLabel"></el-cascader>
         </el-form-item>
         <el-form-item label="上架状态" prop="isShown">
-          <el-radio-group v-model="goodForm.goodsSellStatus">
+          <el-radio-group v-model="giftForm.isShown">
             <el-radio label="0">上架</el-radio>
             <el-radio label="1">下架</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item required label="礼物主图" prop="goodsCoverImg">
+        <el-form-item label="礼物主图" prop="imgUrl">
           <el-upload
             class="avatar-uploader"
             :action="uploadImgServer"
@@ -41,7 +44,7 @@
             :before-upload="handleBeforeUpload"
             :on-success="handleUrlSuccess"
           >
-            <img style="width: 100px; height: 100px; border: 1px solid #e9e9e9;" v-if="goodForm.goodsCoverImg" :src="goodForm.goodsCoverImg" class="avatar">
+            <img style="width: 100px; height: 100px; border: 1px solid #e9e9e9;" v-if="giftForm.imgUrl" :src="giftForm.imgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -69,7 +72,7 @@ export default {
     const { proxy } = getCurrentInstance()
     console.log('proxy', proxy)
     const editor = ref(null)
-    const goodRef = ref(null)
+    const giftRef = ref(null)
     const route = useRoute()
     const router = useRouter()
     const { id } = route.query
@@ -78,7 +81,8 @@ export default {
       token: localGet('token') || '',
       id: id,
       defaultCate: '',
-      goodForm: {
+      defaultLabel:'',
+      giftForm: {
         giftName: '',
         giftIntro: '',
         originalPrice: '',
@@ -86,12 +90,12 @@ export default {
         stockNum: '',
         isShown: '0',
         imgUrl: '',
-        tag: ''
+        giftLabelIdList: ''
       },
       rules: {
-        imgUrl: [
-          { required: 'true', message: '请上传主图', trigger: ['change'] }
-        ],
+        // imgUrl: [
+        //   { required: 'true', message: '请上传主图', trigger: ['change'] }
+        // ],
         giftName: [
           { required: 'true', message: '请填写礼物名称', trigger: ['change'] }
         ],
@@ -105,23 +109,46 @@ export default {
           { required: 'true', message: '请填写礼物库存', trigger: ['change'] }
         ],
       },
-      categoryId: '',
+      categoryid: '',
       category: {
         lazy: true,
         lazyLoad(node, resolve) {
           const { level = 0, value } = node
-          axios.get('/admin/categories', {
+          axios.get('/admin/categories/level', {
             params: {
-              pageNumber: 1,
-              pageSize: 1000,
+              currentPage: 1,
+              pageSize: 10,
               categoryLevel: level + 1,
               parentId: value || 0
             }
           }).then(res => {
             const list = res.list
             const nodes = list.map(item => ({
-              value: item.categoryId,
-              label: item.categoryName,
+              value: item.categoryid,
+              label: item.categoryname,
+              leaf: level > 1
+            }))
+            resolve(nodes)
+          })
+        }
+      },
+      labelid: '',
+      label: {
+        lazy: true,
+        lazyLoad(node, resolve) {
+          const { level = 0, value } = node
+          axios.get('/admin/label/labelLevel', {
+            params: {
+              currentPage: 1,
+              pageSize: 10,
+              labelLevel: level + 1,
+              parentId: value || 0
+            }
+          }).then(res => {
+            const list = res.list
+            const nodes = list.map(item => ({
+              value: item.labelid,
+              label: item.labelname,
               leaf: level > 1
             }))
             resolve(nodes)
@@ -161,24 +188,24 @@ export default {
       })
       instance.create()
       if (id) {
-        axios.get(`/goods/${id}`).then(res => {
-          const { goods, firstCategory, secondCategory, thirdCategory } = res
-          state.goodForm = {
-            goodsName: goods.goodsName,
-            goodsIntro: goods.goodsIntro,
-            originalPrice: goods.originalPrice,
-            sellingPrice: goods.sellingPrice,
-            stockNum: goods.stockNum,
-            goodsSellStatus: String(goods.goodsSellStatus),
-            goodsCoverImg: proxy.$filters.prefix(goods.goodsCoverImg),
-            tag: goods.tag,
-            categoryId: goods.goodsCategoryId
+        axios.get(`/admin/gift/${id}`).then(res => {
+          const { gift, categories } = res
+          state.giftForm = {
+            giftName: gift.giftName,
+            // giftIntro: gift.giftIntro,
+            // originalPrice: gift.originalPrice,
+            // vipPrice: gift.vipPrice,
+            // stockNum: gift.stockNum,
+            // isShown: String(gift.isShown),
+            // imgUrl: proxy.$filters.prefix(gift.imgUrl),
+            // giftLabelIdList: gift.giftLabelIdList,
+             categoryid: categories.categoryid
           }
-          state.categoryId = goods.goodsCategoryId
-          state.defaultCate = `${firstCategory.categoryName}/${secondCategory.categoryName}/${thirdCategory.categoryName}`
+          //state.categoryid = categories.categoryid
+          //state.defaultCate = `${firstCategory.categoryName}/${secondCategory.categoryName}/${thirdCategory.categoryName}`
           if (instance) {
-            // 初始化商品详情 html
-            instance.txt.html(goods.goodsDetailContent)
+            // 初始化礼物详情 html
+            instance.txt.html(gift.giftDetail)
           }
         })
       }
@@ -188,45 +215,49 @@ export default {
       instance = null
     })
     const submitAdd = () => {
-      goodRef.value.validate((vaild) => {
+      giftRef.value.validate((vaild) => {
         if (vaild) {
           // 默认新增用 post 方法
           let httpOption = axios.post
           let params = {
-            goodsCategoryId: state.categoryId,
-            goodsCoverImg: state.goodForm.goodsCoverImg,
-            goodsDetailContent: instance.txt.html(),
-            goodsIntro: state.goodForm.goodsIntro,
-            goodsName: state.goodForm.goodsName,
-            goodsSellStatus: state.goodForm.goodsSellStatus,
-            originalPrice: state.goodForm.originalPrice,
-            sellingPrice: state.goodForm.sellingPrice,
-            stockNum: state.goodForm.stockNum,
-            tag: state.goodForm.tag
+            giftId: state.giftForm.giftId,
+            giftName: state.giftForm.giftName,
+            giftIntro: state.giftForm.giftIntro,
+            originalPrice: state.giftForm.originalPrice,
+            vipPrice: state.giftForm.vipPrice,
+            stockNum: state.giftForm.stockNum,
+            giftThirdCategoryId: state.categoryid,
+            giftLabelIdList: state.giftForm.giftLabelIdList,
+            isShown: state.giftForm.isShown,
+            imgUrl: state.giftForm.imgUrl,
+            giftDetail: instance.txt.html(),
+            vendorId: 11
+            
+            
           }
-          if (hasEmoji(params.goodsIntro) || hasEmoji(params.goodsName) || hasEmoji(params.tag) || hasEmoji(params.goodsDetailContent)) {
+          if (hasEmoji(params.giftIntro) || hasEmoji(params.giftName) || hasEmoji(params.giftLabelIdList) || hasEmoji(params.giftDetail)) {
             ElMessage.error('不要输入表情包，再输入就打死你个龟孙儿~')
             return
           }
-          if (params.goodsName.length > 128) {
-            ElMessage.error('礼物名称不能超过128个字符')
+          if (params.giftName.length > 30) {
+            ElMessage.error('礼物名称不能超过30个字符')
             return
           }
-          if (params.goodsIntro.length > 200) {
-            ElMessage.error('礼物简介不能超过200个字符')
+          if (params.giftIntro.length > 100) {
+            ElMessage.error('礼物简介不能超过100个字符')
             return
           }
-          if (params.tag.length > 16) {
+          if (params.giftLabelIdList.length > 16) {
             ElMessage.error('礼物标签不能超过16个字符')
             return
           }
           console.log('params', params)
           if (id) {
-            params.goodsId = id
-            // 修改商品使用 put 方法
+            params.giftId = id
+            // 修改礼物使用 put 方法
             httpOption = axios.put
           }
-          httpOption('/goods', params).then(() => {
+          httpOption('/admin/gift', params).then(() => {
             ElMessage.success(id ? '修改成功' : '添加成功')
             router.push({ path: '/good' })
           })
@@ -241,19 +272,24 @@ export default {
       }
     }
     const handleUrlSuccess = (val) => {
-      state.goodForm.goodsCoverImg = val.data || ''
+      state.giftForm.imgUrl = val.data || ''
     }
     const handleChangeCate = (val) => {
-      state.categoryId = val[2] || 0
+      state.categoryid = val[2] || 0
+    }
+
+    const handleChangeLable = (val) => {
+      state.giftLabelIdList = val[2] || 0
     }
     return {
       ...toRefs(state),
-      goodRef,
+      giftRef,
       submitAdd,
       handleBeforeUpload,
       handleUrlSuccess,
       editor,
-      handleChangeCate
+      handleChangeCate,
+      handleChangeLable
     }
   }
 }

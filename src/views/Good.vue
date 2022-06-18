@@ -20,26 +20,25 @@
         prop="giftId"
         label="礼物编号"
       >
-      <!--修改-->
       </el-table-column>
+
       <el-table-column
         prop="giftName"
         label="礼物名"
       >
-      <!--修改-->
       </el-table-column>
+
       <el-table-column
         prop="giftIntro"
         label="礼物简介"
       >
-
       </el-table-column>
+      
       <el-table-column
         label="礼物图片"
         width="150px"
       >
         <template #default="scope">
-        <!--修改-->
           <img style="width: 100px; height: 100px;" :key="scope.row.giftId" :src="$filters.prefix(scope.row.imgUrl)" alt="商品主图">
         </template>
       </el-table-column>
@@ -48,24 +47,24 @@
         label="礼物库存"
       >
       </el-table-column>
+
       <el-table-column
         prop="originalPrice"
         label="礼物原价"
       >
-
       </el-table-column>
+
       <el-table-column
         prop="vipPrice"
         label="礼物售价"
       >
-
       </el-table-column>
+
       <el-table-column
         label="上架状态"
       >
         <template #default="scope">
-        <!--修改-->
-          <span style="color: green;" v-if="scope.row.isShown == 1">销售中</span>
+          <span style="color: green;" v-if="scope.row.isShown == 0">销售中</span>
           <span style="color: red;" v-else>已下架</span>
         </template>
       </el-table-column>
@@ -77,12 +76,10 @@
 
         <template #default="scope">
           <a style="cursor: pointer; margin-right: 10px" @click="handleEdit(scope.row.giftId)">修改</a>
-          <a style="cursor: pointer; margin-right: 10px"  @click="handleStatus(scope.row.giftId, 0)">下架</a>
-          <!--  删除 v-if="scope.row.goodsSellStatus == 1"-->
-          <a style="cursor: pointer; margin-right: 10px"  @click="handleStatus(scope.row.giftId, 1)">上架</a>
-          <!--删除 v-else-->
+          <a style="cursor: pointer; margin-right: 10px"  v-if="scope.row.isShown == 0" @click="handleStatus(scope.row.giftId, 1)">下架</a>
+          <a style="cursor: pointer; margin-right: 10px"  v-else @click="handleStatus(scope.row.giftId, 0)">上架</a>
         </template>
-      </el-table-column>
+    </el-table-column>
     </el-table>
     <!--总数超过一页，再展示分页器-->
     <el-pagination
@@ -97,7 +94,7 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref, toRefs } from 'vue'
+import { onBeforeMount, onMounted, reactive, ref, toRefs } from 'vue'
 import axios from '@/utils/axios'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -112,22 +109,40 @@ export default {
       multipleSelection: [], // 选中项
       total: 0, // 总条数
       currentPage: 1, // 当前页
-      pageSize: 10 // 分页大小
+      pageSize: 10, // 分页大小
+      vendorId: ''
     })
+    
+    // onBeforeMount(() => {
+    //   getVendorId()
+    // })
     onMounted(() => {
+      //getVendorId()
       getGoodList()
     })
-    // 获取轮播图列表
+
+    // const getVendorId = () =>{
+    //   axios.get('/admin/vendor/profile').then(res => {
+    //     state.vendorId = res.vendorId
+    //     //console.log(state.vendorId)
+    //   })
+    // }
+
+    // 获取礼物列表
     const getGoodList = () => {
-      state.loading = true
-      //修改
-      axios.get('/admin/gift?pageNum=1&pageSize=10&vendorId=11'
-      /*, {
+      axios.get('/admin/vendor/profile').then(res => {
+        state.vendorId = res.vendorId
+        console.log(state.vendorId)
+      })
+      state.loading = true 
+      axios.get('/admin/gift'
+      ,{
         params: {
-          pageNumber: state.currentPage,
-          pageSize: state.pageSize
+          pageNum: state.currentPage,
+          pageSize: state.pageSize,
+          vendorId : state.vendorId
         }
-      }*/).then(res => {
+      }).then(res => {
         state.tableData = res.list
         state.total = res.totalCount
         state.currentPage = res.currPage
@@ -165,7 +180,8 @@ export default {
       handleEdit,
       getGoodList,
       changePage,
-      handleStatus
+      handleStatus,
+      // getVendorId
     }
   }
 }
