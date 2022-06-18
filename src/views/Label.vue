@@ -20,13 +20,21 @@
       </el-table-column>
       <el-table-column
           prop="labelname"
-          label="分类名称"
+          label="标签名称"
+          width="200"
       >
+      </el-table-column>
+      <el-table-column
+          label="标签图"
+          width="200">
+        <template #default="scope">
+          <img style="width: 200px;height: 200px" :src="scope.row.labelicon" alt="标签图">
+        </template>
       </el-table-column>
       <el-table-column
           prop="labelrank"
           label="排序值"
-          width="200"
+          width="100"
       >
       </el-table-column>
       <el-table-column
