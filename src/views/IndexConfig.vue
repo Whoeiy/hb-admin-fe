@@ -107,7 +107,7 @@ export default {
       currentPage: 1, // 当前页
       pageSize: 10, // 分页大小
       type: 'add', // 操作类型
-      configType: 3, // 3-(首页)热销商品 4-(首页)新品上线 5-(首页)为你推荐
+      configType: 1, // 1-(首页)热销商品 2-(首页)新品上线 3-(首页)为你推荐
 
     })
     // 监听路由变化

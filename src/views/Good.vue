@@ -129,8 +129,8 @@ export default {
     // }
 
     // 获取礼物列表
-    const getGoodList = () => {
-      axios.get('/admin/vendor/profile').then(res => {
+    const getGoodList = async () => {
+      await axios.get('/admin/vendor/profile').then(res => {
         state.vendorId = res.vendorId
         console.log(state.vendorId)
       })
@@ -149,6 +149,7 @@ export default {
         state.loading = false
       })
     }
+
     const handleAdd = () => {
       router.push({ path: '/add' })
     }
