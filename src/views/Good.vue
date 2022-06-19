@@ -130,10 +130,19 @@ export default {
 
     // 获取礼物列表
     const getGoodList = async () => {
-      await axios.get('/admin/vendor/profile').then(res => {
-        state.vendorId = res.vendorId
-        console.log(state.vendorId)
+      const username = window.sessionStorage.getItem('username')
+      //console.log(username)
+      if(username == 'admin'){
+        await axios.get('/admin/profile').then(res => {
+        state.vendorId = res.adminID
+        //console.log(state.vendorId)
       })
+      }else{
+        await axios.get('/admin/vendor/profile').then(res => {
+          state.vendorId = res.vendorId
+          //console.log(state.vendorId)
+        })
+      }
       state.loading = true 
       axios.get('/admin/gift'
       ,{

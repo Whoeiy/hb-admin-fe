@@ -60,6 +60,7 @@ export default {
             password: state.ruleForm.password
           }).then(res => {
             localSet('token', res)
+            window.sessionStorage.setItem('username', state.ruleForm.username)
             window.location.href = '/'
           }).catch(res => {
             console.log(res)
