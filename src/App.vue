@@ -11,7 +11,7 @@
         <div class="line" />
         <el-menu
           :default-openeds="state.defaultOpen"
-          background-color="#222832"
+          background-color="#000000"
           text-color="#fff"
           :router="true"
           :default-active='state.currentPath'
@@ -22,8 +22,8 @@
             </template>
             <el-menu-item-group>
               <el-menu-item index="/introduce"><i class="el-icon-data-line" />系统介绍</el-menu-item>
-              <el-menu-item index="/dashboard"><i class="el-icon-odometer" />Dashboard</el-menu-item>
-         <!--     <el-menu-item index="/add"><i class="el-icon-plus" />添加商品</el-menu-item>-->
+              <!--     <el-menu-item index="/dashboard"><i class="el-icon-odometer" />Dashboard</el-menu-item>
+     <el-menu-item index="/add"><i class="el-icon-plus" />添加商品</el-menu-item>-->
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="2">
@@ -146,7 +146,7 @@ export default {
   }
   .aside {
     width: 200px!important;
-    background-color: #222832;
+    background-color: #000000;
     overflow: hidden;
     overflow-y: auto;
     -ms-overflow-style: none;
@@ -211,7 +211,7 @@ export default {
     vertical-align: -1px!important;
   }
   a {
-    color: #409eff;
+    color: #1baeae;
     text-decoration: none;
   }
   .el-pagination {
