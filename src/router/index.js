@@ -13,11 +13,6 @@ const router = createRouter({
       component: () => import(/* webpackChunkName: "introduce" */ '../views/Introduce.vue')
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: () => import(/* webpackChunkName: "dashboard" */ '../views/Index.vue')
-    },
-    {
       path: '/login',
       name: 'login',
       component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')

@@ -2,10 +2,10 @@
   <div class="login-body">
     <div class="login-container">
       <div class="head">
-        <img class="logo" src="https://s.weituibao.com/1582958061265/mlogo.png" />
+        <img class="logo" src="../assets/365logo.png" />
         <div class="name">
-          <div class="title">新蜂商城</div>
-          <div class="tips">Vue3.0 后台管理系统</div>
+          <div class="title">HeartBeat365</div>
+          <div class="tips">礼品后台管理系统</div>
         </div>
       </div>
       <el-form label-position="top" :rules="rules" :model="ruleForm" ref="loginForm" class="login-form">
@@ -85,6 +85,9 @@ export default {
 </script>
 
 <style scoped>
+.logo{
+  height: 20px;
+}
   .login-body {
     display: flex;
     justify-content: center;
@@ -112,8 +115,8 @@ export default {
     margin-right: 20px;
   }
   .head .title {
-    font-size: 28px;
-    color: #1BAEAE;
+    font-size: 24px;
+    color: #1baeae;
     font-weight: bold;
   }
   .head .tips {
