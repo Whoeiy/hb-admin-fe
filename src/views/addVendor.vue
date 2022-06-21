@@ -95,16 +95,23 @@ export default {
     onMounted(() => {
       if (id) {
         axios.get(`/admin/vendor/${id}`).then(res => {
-          const { vendors } = res
-          state.vendorForm = {
-            nameCn: vendors.nameCn,
-            nameEn: vendors.nameEn,
-            logoUrl: proxy.$filters.prefix(goods.logoUrl),
-            store: goods.store,
-            showRank: goods.showRank,
-            isShown: String(goods.isShown),
-          }
-          console.log(res)
+          // const { vendors } = res
+          state.vendorForm.nameCn = res.nameCn
+          state.vendorForm.nameEn = res.nameEn
+          state.vendorForm.logoUrl = res.logoUrl
+          state.vendorForm.store = res.store
+          state.vendorForm.showRank = res.showRank
+          state.vendorForm.isShown = String(res.isShown)
+          // state.vendorForm.
+          // state.vendorForm = {
+          //   nameCn: res.nameCn,
+          //   nameEn: res.nameEn,
+          //   logoUrl: proxy.$filters.prefix(goods.logoUrl),
+          //   store: goods.store,
+          //   showRank: goods.showRank,
+          //   isShown: String(goods.isShown),
+          // }
+          console.log(state.vendorForm)
         })
       }
     })
