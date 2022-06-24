@@ -58,10 +58,7 @@
             placeholder="请输入礼物库存"
           ></el-input>
         </el-form-item>
-        <!-- <el-form-item label="礼物标签" prop="giftLabelIdList">
-          <el-input style="width: 300px" v-model="giftForm.giftLabelIdList" placeholder="请输入礼物小标签"></el-input>
-        </el-form-item> -->
-        <el-form-item required label="礼物标签">
+        <el-form-item label="礼物标签">
           <el-cascader
             :placeholder="defaultLabel"
             style="width: 300px"
@@ -147,7 +144,6 @@ export default {
         stockNum: "",
         isShown: "0",
         imgUrl: "",
-        giftLabelIdList: "",
       },
       vendorId: "",
       rules: {
@@ -238,6 +234,7 @@ export default {
           // result 即服务端返回的接口
           // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
           if (result.data && result.data.length) {
+            result.data = [result.data];
             result.data.forEach((item) => insertImgFn(item));
           }
         },
@@ -251,20 +248,26 @@ export default {
       instance.create();
       if (id) {
         axios.get(`/admin/gift/${id}`).then((res) => {
-          const { gift, categories } = res;
+          const { gift, categories, labels } = res;
+          // console.log(res);
+          console.log(categories);
+          console.log(labels[0]);
           state.giftForm = {
             giftName: gift.giftName,
-            // giftIntro: gift.giftIntro,
-            // originalPrice: gift.originalPrice,
-            // vipPrice: gift.vipPrice,
-            // stockNum: gift.stockNum,
-            // isShown: String(gift.isShown),
-            // imgUrl: proxy.$filters.prefix(gift.imgUrl),
-            // giftLabelIdList: gift.giftLabelIdList,
-            categoryid: categories.categoryid,
+            giftIntro: gift.giftIntro,
+            originalPrice: gift.originalPrice,
+            vipPrice: gift.vipPrice,
+            stockNum: gift.stockNum,
+            isShown: String(gift.isShown),
+            imgUrl: proxy.$filters.prefix(gift.imgUrl),
+            //categoryid: categories.categoryid,
+            //labelid: labels[0].labelid
           };
           //state.categoryid = categories.categoryid
-          //state.defaultCate = `${firstCategory.categoryName}/${secondCategory.categoryName}/${thirdCategory.categoryName}`
+          //console.log(state.categoryid)
+         //state.labelid = labels[0].labelid
+          state.defaultCate = `${categories[0].categoryname}/${categories[1].categoryname}/${categories[2].categoryname}`
+          state.defaultLabel = `${labels[0][0].labelname}/${labels[0][1].labelname}/${labels[0][2].labelname}`
           if (instance) {
             // 初始化礼物详情 html
             instance.txt.html(gift.giftDetail);
@@ -303,7 +306,7 @@ export default {
             vipPrice: state.giftForm.vipPrice,
             stockNum: state.giftForm.stockNum,
             giftThirdCategoryId: state.categoryid,
-            giftLabelIdList: state.giftForm.giftLabelIdList,
+            giftLabelIdList: `${state.labelid}`,
             isShown: state.giftForm.isShown,
             imgUrl: state.giftForm.imgUrl,
             giftDetail: instance.txt.html(),
@@ -312,7 +315,6 @@ export default {
           if (
             hasEmoji(params.giftIntro) ||
             hasEmoji(params.giftName) ||
-            hasEmoji(params.giftLabelIdList) ||
             hasEmoji(params.giftDetail)
           ) {
             ElMessage.error("不要输入表情包，再输入就打死你个龟孙儿~");
@@ -324,10 +326,6 @@ export default {
           }
           if (params.giftIntro.length > 100) {
             ElMessage.error("礼物简介不能超过100个字符");
-            return;
-          }
-          if (params.giftLabelIdList.length > 16) {
-            ElMessage.error("礼物标签不能超过16个字符");
             return;
           }
           console.log("params", params);
@@ -355,10 +353,12 @@ export default {
     };
     const handleChangeCate = (val) => {
       state.categoryid = val[2] || 0;
+      console.log(val);
     };
 
-    const handleChangeLable = (val) => {
-      state.giftLabelIdList = val[2] || 0;
+    const handleChangeLabel = (val) => {
+      state.labelid = val[2] || 0;
+      console.log(val);
     };
     return {
       ...toRefs(state),
@@ -368,7 +368,7 @@ export default {
       handleUrlSuccess,
       editor,
       handleChangeCate,
-      handleChangeLable,
+      handleChangeLabel,
     };
   },
 };
