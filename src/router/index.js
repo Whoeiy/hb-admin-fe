@@ -107,6 +107,16 @@ const router = createRouter({
       name: 'addVendor',
       component: () => import(/* webpackChunkName: "vendor" */ '../views/addVendor.vue')
     },
+    {
+      path: '/giftcustom',
+      name: 'giftcustom',
+      component: () => import(/* webpackChunkName: "vendor" */ '../views/GiftCustom.vue')
+    },
+    {
+      path: '/addGiftCustom',
+      name: 'addGiftCustom',
+      component: () => import(/* webpackChunkName: "vendor" */ '../views/addGiftCustom.vue')
+    },
 
   ]
 })

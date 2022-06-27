@@ -48,6 +48,8 @@ export const pathMap = {
   order_detail: '订单详情',
   account: '修改账户',
   vendor: '商家管理',
-  addVendor: '添加商家'
+  addVendor: '添加商家',
+  giftcustom:'定制服务管理',
+  addGiftCustom:'添加服务'
 
 }

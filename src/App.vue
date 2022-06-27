@@ -45,8 +45,9 @@
               <el-menu-item index="/category"><i class="el-icon-menu" />分类管理</el-menu-item>
               <el-menu-item index="/Label"><i class="el-icon-menu" />标签管理</el-menu-item>
               <el-menu-item index="/good"><i class="el-icon-s-goods" />礼物管理</el-menu-item>
-                <el-menu-item index="/order"><i class="el-icon-s-order" />订单管理</el-menu-item>
+              <el-menu-item index="/order"><i class="el-icon-s-order" />订单管理</el-menu-item>
               <el-menu-item index="/vendor"><i class="el-icon-s-order" />商家管理</el-menu-item>
+              <el-menu-item index="/giftcustom"><i class="el-icon-s-order" />定制服务管理</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="4">
