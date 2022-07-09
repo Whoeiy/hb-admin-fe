@@ -48,6 +48,7 @@
               <el-menu-item index="/order"><i class="el-icon-s-order" />订单管理</el-menu-item>
               <el-menu-item index="/vendor"><i class="el-icon-s-order" />商家管理</el-menu-item>
               <el-menu-item index="/giftcustom"><i class="el-icon-s-order" />定制服务管理</el-menu-item>
+              <el-menu-item index="/coupon"><i class="el-icon-s-order" />优惠券管理</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="4">

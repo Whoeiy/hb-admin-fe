@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column
           label="标签图"
-          width="200">
+          width="250">
         <template #default="scope">
           <img style="width: 200px;height: 200px" :src="scope.row.labelicon" alt="标签图">
         </template>
@@ -34,7 +34,7 @@
       <el-table-column
           prop="labelrank"
           label="排序值"
-          width="100"
+          width="150"
       >
       </el-table-column>
       <el-table-column

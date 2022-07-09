@@ -46,9 +46,11 @@ export const pathMap = {
   good: '礼物管理',
   order: '订单管理',
   order_detail: '订单详情',
+  coupon:'优惠券管理',
   account: '修改账户',
   vendor: '商家管理',
   addVendor: '添加商家',
+  addCoupon:'优惠券管理',
   giftcustom:'定制服务管理',
   addGiftCustom:'添加服务'
 
