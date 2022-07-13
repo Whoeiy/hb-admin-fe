@@ -29,9 +29,7 @@ export const uploadImgsServer = '/api/admin/upload/files'
 export const pathMap = {
   login: '登录',
   introduce: '系统介绍',
-
   dashboard: '大盘数据',
-
   add: '添加商品',
   swiper: '轮播图配置',
   hot: '热销礼物配置',
@@ -47,10 +45,12 @@ export const pathMap = {
   order: '订单管理',
   order_detail: '订单详情',
   coupon:'优惠券管理',
+  activity:'活动管理',
   account: '修改账户',
   vendor: '商家管理',
   addVendor: '添加商家',
   addCoupon:'优惠券管理',
+  addActivity:'添加活动信息',
   giftcustom:'定制服务管理',
   addGiftCustom:'添加服务'
 

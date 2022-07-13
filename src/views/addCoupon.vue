@@ -32,7 +32,7 @@
           <el-input v-model="vendorForm.endtime"  type="date" placeholder="结束" format="yyyy-MM-dd"  style="width:150px" />
         </el-form-item>
         <el-form-item  label="排序" prop="showRank">
-          <el-input min="0" style="width: 300px" v-model.number="vendorForm.showrank" placeholder="请输入商家排序"></el-input>
+          <el-input min="0" style="width: 300px" v-model.number="vendorForm.showrank" placeholder="请输入优惠劵排序"></el-input>
         </el-form-item>
         <el-form-item label="是否显示" prop="isshown">
           <el-radio-group v-model="vendorForm.isshown">
