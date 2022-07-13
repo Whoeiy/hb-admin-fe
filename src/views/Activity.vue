@@ -83,19 +83,22 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" width="300" align="center">
+      <el-table-column label="操作" width="250px" >
         <template #default="scope">
           <el-button
               size="mini"
+              v-if="scope.row.activitystatus == 0"
               @click="handleEdit(scope.row.activityid)">编辑
           </el-button>
           <el-button
               size="mini"
-              @click="handleEdit(scope.row.activityid)">开始
+              v-if="scope.row.activitystatus == 0"
+              @click="handleStart(scope.row.activityid)">开始
           </el-button>
           <el-button
               size="mini"
-              @click="handleEdit(scope.row.activityid)">结束
+              v-if="scope.row.activitystatus == 1"
+              @click="handleEnd(scope.row.activityid)">结束
           </el-button>
           <el-popconfirm
               title="确定删除吗？"
@@ -165,7 +168,6 @@ export default {
         params: {
           currentPage: state.currentPage,
           pageSize: state.pageSize,
-          //  createUser: state.createUser,
         }
       }).then(res => {
         state.tableData = res.list
@@ -231,7 +233,22 @@ export default {
         console.log(res)
       })
     }
-
+    const handleEnd = (id) => {
+      axios.put(`admin/activity/end?activityId=${id}`, {
+        ids: id
+      }).then(() => {
+        ElMessage.success('活动结束')
+        getVendorList()
+      })
+    }
+    const handleStart = (id) => {
+      axios.put(`admin/activity/start?activityId=${id}`, {
+        ids: id
+      }).then(() => {
+        ElMessage.success('活动开始成功')
+        getVendorList()
+      })
+    }
     const handleEdit = (id) => {
       router.push({ path: '/addActivity', query: { id } })
     }
@@ -240,8 +257,10 @@ export default {
       ...toRefs(state),
       getVendorList,
       handleAdd,
+      handleStart,
       handleUpdate,
       handleStatus,
+      handleEnd,
       changePage,
       handleDeleteOne,
       handleOption,

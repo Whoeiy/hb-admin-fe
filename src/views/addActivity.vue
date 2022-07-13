@@ -5,7 +5,7 @@
         <el-form-item label="活动名称" prop="activityname">
           <el-input style="width: 300px" v-model="vendorForm.activityname" placeholder="请输入活动名称"></el-input>
         </el-form-item>
-        <el-form-item required label="活动类型">
+        <el-form-item required label="活动类型" placeholder="请选择活动类型">
           <el-select v-model="vendorForm.activitytype" @change="handleChange" >
             <el-option
                 label="有奖活动"
@@ -166,16 +166,16 @@ export default {
     onMounted(() => {
       if (id) {
         axios.get(`/admin/activity/${id}`).then(res => {
-          state.vendorForm.activityname = res.activityname
-          state.vendorForm.activitytype = String(res.activitytype)
-          state.vendorForm.activitydetail = res.activitydetail
+          state.vendorForm.activityname = res.activity.activityname
+          state.vendorForm.activitytype = String(res.activity.activitytype)
+          state.vendorForm.activitydetail = res.activity.activitydetail
           // state.vendorForm.activitystatus = res.activitystatus
-          state.vendorForm.starttime = res.starttime
-          state.vendorForm.endtime = res.endtime
-          state.vendorForm.showrank = res.showrank
-          state.vendorForm.isshown = String(res.isshown)
-          state.couponid= res.couponid
-          state.vendorForm.posterurl= res.posterurl
+          state.vendorForm.starttime = res.activity.starttime
+          state.vendorForm.endtime = res.activity.endtime
+          state.vendorForm.showrank = res.activity.showrank
+          state.vendorForm.isshown = String(res.activity.isshown)
+          state.couponid= res.coupon.couponid
+          state.vendorForm.posterurl= res.activity.posterurl
           console.log(state.vendorForm)
         })
       }
