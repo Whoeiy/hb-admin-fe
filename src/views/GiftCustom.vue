@@ -95,7 +95,7 @@ import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 
 export default {
-  name: "Vendor",
+  name: "CustomService",
   setup() {
     const multipleTable = ref(null);
     const router = useRouter();
