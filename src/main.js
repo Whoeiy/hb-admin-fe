@@ -2,11 +2,8 @@ import { createApp } from 'vue'
 import { ElButton, ElContainer, ElAside, ElHeader, ElMain, ElFooter, ElMenu, ElSubmenu, ElMenuItemGroup, ElMenuItem, ElForm, ElFormItem, ElInput, ElPopover, ElTag, ElCard, ElTable, ElTableColumn, ElPagination, ElDialog, ElPopconfirm, ElUpload, ElLoading, ElSelect, ElOption, ElRadioGroup, ElRadio, ElCascader, ElCheckbox, ElInputNumber } from 'element-plus'
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
-//import formatDate from './utils/formatDate';
 import App from './App.vue'
 import router from './router/index'
-
-// import 'element-plus/lib/theme-chalk/index.css'
 
 // 修改后的主题样式必须放在最后面
 import '../theme/index.css'
@@ -33,7 +30,7 @@ app.config.globalProperties.$filters = {
     if (url && url.startsWith('http')) {
       return url
     } else {
-      url = `http://backend-api-02.heartbeat365.ltd${url}`
+      url = `http://101.133.131.175:8081/upload/${url}`
       return url
     }
   },

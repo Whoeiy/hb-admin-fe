@@ -51,14 +51,14 @@
               <el-menu-item index="/activity"><i class="el-icon-s-order" />活动管理</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="4">
+          <!-- <el-submenu index="4">
             <template #title>
               <span>系统管理</span>
             </template>
             <el-menu-item-group>
               <el-menu-item index="/account"><i class="el-icon-lock" />修改密码</el-menu-item>
             </el-menu-item-group>
-          </el-submenu>
+          </el-submenu> -->
         </el-menu>
       </el-aside>
       <el-container class="content">
